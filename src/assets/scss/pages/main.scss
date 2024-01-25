@@ -1,0 +1,184 @@
+.full__wrap {
+    width: 100%;
+    @media #{$desktop} {
+    max-width: 1280px;
+    margin: 0 auto;
+    }
+}
+
+// 알림 
+.alert-msg__box {
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    padding: 16px 16px;
+    @include fontoption(14px,#262626, 400, 20px);
+}
+
+// post
+.post-item__wrap {
+    display: flex;
+    flex-direction: column;
+    .poster-wrap {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+    .post-action {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 16px;
+        .icon-left,
+        .icon-right {
+            display: flex;
+            gap: 15px;
+        }        
+    }
+    .profile-wrap {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px;
+        gap: 10px;
+        .poster-people {
+            display: flex;
+            gap: 5px;
+            line-height: 18px;
+            .name {
+                font-size:12px;
+                strong {
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+            }
+        }
+        .profile {
+            display: block;
+            width:28px;
+            height:28px;
+            overflow: hidden;
+            border-radius: 50%;
+            border:1px solid #ddd;
+          }          
+    }
+    .post-info {
+        padding: 16px;
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            .profile {
+                display: inline-block;
+                width:20px;
+                height:20px;
+                overflow: hidden;
+                border-radius: 50%;
+                border:1px solid #ddd;
+            }
+        }
+        .like-count {
+            font-weight: 500;
+        }
+    }
+}
+.nodata {
+    padding: 50px ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+// 등록
+.post-upload-form {
+    padding: 16px 0;
+    .button__wrap {
+        padding-top: 32px;
+    }
+    .join-form {
+        padding: 0 16px;
+        @media #{$desktop} {
+            width: rem(600px);
+            margin:0 auto;
+        }         
+    }
+    .preview {
+        display: flex;
+        justify-content: center;
+        max-width: 100%;
+    }
+}
+.upload-form {
+    padding: 0 16px;
+    @media #{$desktop} {
+        width: rem(600px);
+        margin:0 auto;
+    }  
+    li {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+}
+//my page
+.mypage__wrap {
+    padding: 0 16px;
+    .user-detail-info {
+        display: flex;
+        // justify-content: space-between;
+        padding: 16px 0;
+        gap: rem(20px);
+        .profile {
+            display: block;
+            width:96px;
+            height:96px;
+            overflow: hidden;
+            border-radius: 50%;
+            border:1px solid #000;            
+        }
+        .active-info {
+            display: flex;
+            align-items: center;
+            a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                @include fontoption(14px, #000, 500, 20px);
+                strong {
+                    font-weight: 400;
+                    font-size: 12px;
+                }
+            }
+
+        }
+    }
+    .my-greater-list {
+        margin-top: 32px;
+        .my-pick-list {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            ul {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                li {
+                    width: calc(100% / 4); 
+                    .thumnail {
+                        display: block;
+                        width: 100%;
+                        height: 120px;
+                        overflow: hidden;
+                        img {
+                            width: 100%;
+                        }
+                    }                   
+                }                
+            }
+
+        }
+    }
+}
+
+//날씨 카드
+.weather-card {
+    border-bottom: 1px solid #ddd;
+    padding: 50px 0;
+}

@@ -1,0 +1,112 @@
+.login__page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;   
+    .logo-center {
+        padding-top: 20%;
+        @media #{$desktop} {
+            padding-top: 50px;
+        }
+    }
+    .login__form {
+        width: 100%;
+        padding: 0 16px;
+        @media #{$desktop} {
+            width: rem(600px);
+            margin: 0 auto;
+        }        
+        .login {            
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }        
+    }
+    .login-help-menu {
+        padding: 16px 0px 30px;
+        text-align: right;
+        @include fontoption(14px, #3797EF, 400, 16px);
+    }
+    .sns__login {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 37px 0;
+        gap: 15px;
+    }
+    // sns login
+    .icon-naver {
+        width:20px;
+        height:20px;
+        display: block;
+        border-radius: 50%;
+        background-image: url('./images/icon/icon-naver.png');
+        background-position: center center;
+        background-size: 20px 20px;
+    }
+    .icon-kakao {
+        width:20px;
+        height:20px;
+        display: block;
+        border-radius: 50%;
+        background-image: url('./images/icon/icon-kakaotalk.png');
+        background-position: center center;
+        background-size: 20px 20px;
+    } 
+    .icon-google {
+        width:20px;
+        height:20px;
+        display: block;
+        border-radius: 50%;
+        background-image: url('./images/icon/icon-google.png');
+        background-position: center center;
+        background-size: 20px 20px;
+    }     
+    .sign-guide__wrap {
+        position: relative;
+        text-align: center;
+        &::before {
+            content: '';
+            display: block;
+            height: 1px;
+            width: auto;
+            left:15px;
+            position: absolute;
+            background-color: rgba(0,0,0,0.2);
+            top: 13px;
+            right: calc(50% + 10%);
+        }
+        &::after {
+            content: '';
+            display: block;
+            height: 1px;
+            width: auto;
+            right:15px;
+            position: absolute;
+            background-color: rgba(0,0,0,0.2);
+            top: 13px;
+            left: calc(50% + 10%);
+        }        
+        a {
+            @include fontoption(14px, #3797EF, 400, 16px);  
+        }
+    }      
+    .manage__info {
+        padding-top: 50px;
+        text-align: center;
+    }
+}
+// common logo
+.logo-center {
+    padding: 0% 0 8%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media #{$desktop} {
+        padding: 0% 0 2%;
+    }   
+    h1 {
+        @include fontoption(30px, #000, 500, 35px);
+        font-family: 'Lobster', sans-serif;
+    }
+}

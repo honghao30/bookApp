@@ -1,0 +1,62 @@
+#root {width: 100%;height: 100%;}
+html, body {
+  height: 100%;
+}
+.wrap {
+  width: 100%;
+  overflow: hidden;
+  .header__wrap {
+    width: auto;
+    height: 40px;
+    padding: 5px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e6e6e6;
+    @media #{$desktop} {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 1280px;
+    }
+    .utils-top__wrap {
+      display: flex;
+      gap: 10px;     
+    }
+   
+    .logo {
+        @include fontoption(20px,#000, 700, 27px);
+        font-family: 'Lobster', sans-serif;
+    }
+    &.my-page {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      .user-name {
+        @include fontoption(16px,#000, 500, 20px);
+        position: absolute;
+        left:50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  .BottomNav__wrap {
+    position: fixed;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 56px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);     
+    background-color: #fff;
+  }
+  .footer__wrap {
+    border-top: 1px solid #ddd;
+    padding: 20px 0;
+    text-align: center;
+    p {
+        @include fontoption(14px,#000, 400, 20px);
+    }    
+  }
+}

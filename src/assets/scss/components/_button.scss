@@ -1,0 +1,311 @@
+$radius: 6px;
+
+//버튼 공통
+@mixin btnCommon {
+  position: relative;
+  display: inline-grid;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: -.025em;
+  line-height: normal;
+  max-width: 100%;  
+  border-radius: $radius;  
+  text-decoration: none;
+  vertical-align: middle;
+  font-weight: 700;
+  outline: none;
+  border: none;
+  padding:0 20px;
+  cursor: pointer;
+}
+@mixin btntype($btnFontSize,$btnBorder,$btnBGColor,$btnColor,$radius, $btnHoverColor,$btnHoverFtColor, $btnHoverBorderColor) {  
+  font-size: $btnFontSize;
+  border: 1px solid $btnBorder;
+  color: $btnColor;
+  background-color: $btnBGColor;
+  border-radius: $radius;
+  &:hover,
+  &:focus,
+  &:active,    
+  &.active:focus, 
+  &:active:hover{
+    background-color: $btnHoverColor;
+    color: $btnHoverFtColor;
+    border: 1px solid $btnHoverBorderColor;
+    text-decoration: none;    
+  }
+}
+
+@mixin btnSize($btnFontSize,$btnPadding) { 
+  font-size: $btnFontSize;
+  padding: $btnPadding;
+}
+
+.button__wrap {
+  position: relative;
+  padding:0;
+  gap: 8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  &:last-child {
+    padding-bottom:0;
+  }
+  &.flex-end {
+    justify-content: flex-end;
+  }
+  &.flex-start {
+    justify-content: flex-start;
+  }
+  &.space-between {
+    justify-content: space-between;
+  }
+  > div {
+    display:flex;
+    gap: 8px;
+  }
+}
+
+.btn {
+  @include btnCommon;  
+  min-width: 126px;
+  height: 48px;
+  line-height: 24px;  
+  padding:0 48px;   
+  &.medium {
+    height: 36px;
+    min-width: 90px;
+    font-size: 14px;
+    padding:0 18px; 
+  }
+  &.small {
+    height: 28px;
+    padding: 0 10px;
+    min-width: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    width:auto;
+    border-radius: 4px;
+  }
+  &.full-width {
+    max-width: 100%;
+    min-width: 100%;
+  }
+  &.btn-icon-only {
+    max-width: fit-content;  
+    padding:0;
+    min-width: fit-content;
+    height: fit-content;
+  }
+}
+
+
+//button List
+.btn-primary {
+  @include btntype(14px, $pointColor, $pointColor,#fff, 6px, #3797EF,#fff, #3797EF);
+  font-weight: 400;
+  &:disabled {
+    background-color:#ccc;
+    border-color:#ccc;
+    &:hover, &:active {
+      background-color:#ccc;
+      border-color:#ccc;
+    }
+  }      
+}
+.btn-secondary {
+  @include btntype(14px, $darkColor, $darkColor,#fff, 6px, $darkColor,#fff, $darkColor);
+  font-weight: 400;
+  &:disabled {
+    background-color:#ccc;
+    border-color:#ccc;
+    &:hover, &:active {
+      background-color:#ccc;
+      border-color:#ccc;
+    }
+  }      
+}
+
+.btn-primary-line {
+  @include btntype(14px, $pointColor, #fff,$pointColor, 6px, #fff,$pointColor,$pointColor);
+  font-weight: 400;
+  &:disabled {
+    background-color:#ccc;
+    border-color:#ccc;
+    &:hover, &:active {
+      background-color:#ccc;
+      border-color:#ccc;
+    }
+  }    
+}
+.btn-default-line {
+  @include btntype(14px, #ddd, #fff,#262626, 6px, #fff,#262626,#262626);  
+  &:disabled {
+    background-color:#ccc;
+    border-color:#ccc;
+    &:hover, &:active {
+      background-color:#ccc;
+      border-color:#ccc;
+    }
+  }    
+}
+
+// icon type button
+.icon-calendar {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/icon-calendar.svg);
+  background-position: center;
+  background-size: 25px auto;
+}      
+.icon-favorite {
+  display: block;
+  width:23px;
+  height:23px;
+  background-image: url(./images/icon/icon-Shape.png);
+  background-position: center;
+  background-size: 23px auto;
+}
+.icon-like {
+  display: block;
+  width:26px;
+  height:26px;
+  background-image: url(./images/icon/Icon-heart.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 25px auto;
+} 
+.icon-alert {
+  display: block;
+  width:24px;
+  height:24px;
+  background-image: url(./images/icon/icon-alert.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 24px auto;
+}  
+.icon-home {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/Icon-home.png);
+  background-position: center;
+  background-size: 25px auto;
+}
+.icon-search {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/Icon-search.png);
+  background-position: center;
+  background-size: 25px auto;
+}    
+.icon-add-post {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/Icon-post.png);
+  background-position: center;
+  background-size: 25px auto;
+}     
+.icon-memo {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/icon-memo.svg);
+  background-position: center;
+  background-size: 46px auto;      
+}
+.icon-msg {
+  display: block;
+  width:24px;
+  height:24px;
+  background-image: url(./images/icon/icon-msg.png);
+  background-position: center;
+  background-size:23px auto;  
+}    
+.icon-share {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/icon-Messanger.png);
+  background-position: center;
+  background-size:25px auto;  
+  background-repeat: no-repeat;
+}   
+.icon-video {
+  display: block;
+  width:25px;
+  height:25px;
+  background-image: url(./images/icon/Icons-video.png);
+  background-position: center;
+  background-size:25px auto;  
+  background-repeat: no-repeat;
+}  
+.icon-follow {
+  display: block;
+  width:20px;
+  height:20px;
+  background-image: url(./images/icon/user-follow-svgrepo-com.png);
+  background-position: center;
+  background-size:20px auto;  
+  background-repeat: no-repeat;
+}
+.icon-more {
+  display: block;
+  width:20px;
+  height:20px;
+  background-image: url(./images/icon/icon-more.png);
+  background-position: center;
+  background-size:20px auto;  
+  background-repeat: no-repeat;
+}  
+.icon-hamburger {
+  display: block;
+  width:20px;
+  height:20px;
+  background-image: url(./images/icon/icon_hamburger.png);
+  background-position: center;
+  background-size:20px auto;  
+  background-repeat: no-repeat;
+}
+.icon-eye {
+  display: block;
+  width:20px;
+  height:20px;
+  background-image: url(./images/icon/icon-eye-close.png);
+  background-position: center;
+  background-size:20px auto;  
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 10px;
+}
+.icon-eye-show {
+  display: block;
+  width:20px;
+  height:20px;
+  background-image: url(./images/icon/icon-eye-open.png);
+  background-position: center;
+  background-size:20px auto;  
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 10px;
+}
+.icon-logout {
+  display: block;
+  width:24px;
+  height:24px;
+  background-image: url(./images/icon/icon-off.svg);
+  background-position: center;
+  background-size:24px auto;  
+  background-repeat: no-repeat;
+}
+.icon-profile {
+  display: block;
+  width:28px;
+  height:28px;
+  overflow: hidden;
+  border-radius: 50%;
+  border:1px solid #ddd;
+}  

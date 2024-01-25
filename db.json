@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "email": "admin@gmail.com",
+      "password": "a123456789",
+      "name": "관리자",
+      "birthday": "2000-01-01",
+      "phone": "010-1234-5678",
+      "profile_picture": "profile1.jpg",
+      "posts": [],
+      "subscriptions": [],
+      "follower": []
+    },
+    {
+      "email": "hongsh@gmail.com",
+      "password": "a123456789",
+      "name": "홍성호",
+      "birthday": "1982-02-02",
+      "phone": "010-2345-6789",
+      "profile_picture": "profile2.jpg",
+      "posts": [],
+      "subscriptions": [],
+      "follower": []
+    }
+  ],
+  "posts": [
+  ],
+  "comments": [
+  ],
+  "todo": [
+  ],
+  "books": [
+    {
+        "book_id": 1,
+        "titles": [
+            {
+                "title": "제목1",
+                "content": "제목1에 대한 내용"
+            },
+            {
+                "title": "제목2",
+                "content": "제목2에 대한 내용"
+            }         
+        ]
+    }
+  ]
+}
