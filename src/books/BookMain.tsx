@@ -3,6 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import InsetList from './List';
+import NoteList from './NoteList';
+import OtherList from './TapeList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 interface TabPanelProps {
@@ -42,7 +44,7 @@ const BookMain: React.FC = () => {
     const [value, setValue] = React.useState(0);
     const [bookList, setBookList] = useState([]);
     const [noteList, setNoteList] = useState([]);   
-    const [selmoonList, setSelmoon] = useState([]);
+    const [tapeList, setTapeList] = useState([]);
     const [audioList, setAudioList] = useState([]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -59,11 +61,20 @@ const BookMain: React.FC = () => {
         const response = await axios.get('https://factual-trail-jute.glitch.me/note');
         return response.data;
       };
-  
-      Promise.all([fetchBook(), fetchNote()])
-        .then(([bookData, noteData]) => {
+      const fetchTate = async () => {
+        const response = await axios.get('https://factual-trail-jute.glitch.me/type');
+        return response.data;
+      };
+      const fetchAudio = async () => {
+        const response = await axios.get('https://factual-trail-jute.glitch.me/audio');
+        return response.data;
+      };      
+      Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
+        .then(([bookData, noteData, tapeData, audioData]) => {
           setBookList(bookData);
           setNoteList(noteData);
+          setTapeList(tapeData);
+          setAudioList(audioData);
         })
         .catch(error => console.error('Error fetching data: ', error));
     }, []);
@@ -83,14 +94,14 @@ const BookMain: React.FC = () => {
               <InsetList dataList={bookList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <InsetList dataList={noteList} />
+              <NoteList noteList={noteList} />
             </CustomTabPanel>
-            {/* <CustomTabPanel value={value} index={2}>
-              <InsetList dataList={bookList} />
+            <CustomTabPanel value={value} index={2}>
+              <OtherList otherList={tapeList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-              <InsetList dataList={bookList} />
-            </CustomTabPanel>         */}
+              <OtherList otherList={audioList} />
+            </CustomTabPanel>        
         </Box>
       </div>
     )
