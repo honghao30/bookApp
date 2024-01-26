@@ -7,12 +7,15 @@ const List = styled.ul `
   display: block;
 `;
 const ListItem = styled.li `
-  font-size: 14px;
+  font-size: 15px;
+  padding: 6px 0;
 `
 
   return (
     <List>
-      {dataList.map((book: { title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }, index: Key | null | undefined) => (
+      {dataList.map((book: {
+        [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
+}, index: Key | null | undefined) => (
         <ListItem key={index}>
           {book.cates} 
         </ListItem>

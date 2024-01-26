@@ -41,7 +41,7 @@ function a11yProps(index: number) {
 const BookMain: React.FC = () => {
     const [value, setValue] = React.useState(0);
     const [bookList, setBookList] = useState([]);
-    const [noteList, setNoteList] = useState([]);
+    const [noteList, setNoteList] = useState([]);   
     const [selmoonList, setSelmoon] = useState([]);
     const [audioList, setAudioList] = useState([]);
 
@@ -51,11 +51,21 @@ const BookMain: React.FC = () => {
 
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get('https://succulent-hexagonal-echium.glitch.me/books')       
-        console.log(response.data) 
-        setBookList(response.data)        
-      }
-      fetchBook();      
+        const response = await axios.get('https://factual-trail-jute.glitch.me/books');
+        return response.data;
+      };
+  
+      const fetchNote = async () => {
+        const response = await axios.get('https://factual-trail-jute.glitch.me/note');
+        return response.data;
+      };
+  
+      Promise.all([fetchBook(), fetchNote()])
+        .then(([bookData, noteData]) => {
+          setBookList(bookData);
+          setNoteList(noteData);
+        })
+        .catch(error => console.error('Error fetching data: ', error));
     }, []);
 
     return (
@@ -72,10 +82,10 @@ const BookMain: React.FC = () => {
             <CustomTabPanel value={value} index={0}>
               <InsetList dataList={bookList} />
             </CustomTabPanel>
-            {/* <CustomTabPanel value={value} index={1}>
-              <InsetList dataList={bookList} />
+            <CustomTabPanel value={value} index={1}>
+              <InsetList dataList={noteList} />
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
+            {/* <CustomTabPanel value={value} index={2}>
               <InsetList dataList={bookList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
