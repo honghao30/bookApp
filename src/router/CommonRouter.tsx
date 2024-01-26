@@ -15,6 +15,7 @@ import BookLayout from '../layout/BookLayout';
 
 // BOOK
 import BookMain from '../books/BookMain'
+import DetailList from '../books/DetailList'
 
 function CommonRouter() {
     return (
@@ -30,7 +31,10 @@ function CommonRouter() {
         </Route>   
         <Route element={<BookLayout />}>          
           <Route path="/BookMain" element={<BookMain />}></Route>             
-        </Route>         
+        </Route>   
+        <Route element={<BookLayout />}>          
+          <Route path="/DetailList/:book_id" element={<DetailList />} />                      
+        </Route>                 
       </Routes>
     )
   }
