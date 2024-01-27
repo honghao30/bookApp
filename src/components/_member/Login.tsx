@@ -110,7 +110,7 @@ const LoginForm: React.FC  = () => {
                 </MyBtn>               
             </div>
             <div className='sign-guide__wrap'>                
-                Please Login
+                <Link to="/bookMain">Please Login</Link>
             </div>
             <div className='manage__info'>                
                 <Link to="http://www.ncpcog.co.kr" target='_blank'>Contact to Manage?</Link> 

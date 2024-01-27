@@ -16,6 +16,7 @@ import BookLayout from '../layout/BookLayout';
 // BOOK
 import BookMain from '../books/BookMain'
 import BookSubList from '../books/DetailList'
+import ReadDetail from '../books/ReadDetail'
 
 function CommonRouter() {
     return (
@@ -34,7 +35,10 @@ function CommonRouter() {
         </Route>   
         <Route element={<BookLayout />}>          
           <Route path="/DetailList/:book_id" element={<BookSubList />} />                      
-        </Route>                 
+        </Route> 
+        <Route element={<BookLayout />}>          
+          <Route path="/ReadDetail/:bookLisId" element={<ReadDetail />} />                      
+        </Route>                         
       </Routes>
     )
   }

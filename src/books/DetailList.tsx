@@ -26,7 +26,7 @@ const BookSubList: React.FC = () => {
     
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get(`https://booksapi-orxz.onrender.com/bookList0${book_id}`);
+        const response = await axios.get(`https://tasty-tricolor-tango.glitch.me/bookList${book_id}`);
         setBook(response.data);
       };
       fetchBook();
@@ -46,7 +46,9 @@ const BookSubList: React.FC = () => {
               [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
-                <Link to={`/DetailList/${book.book_id}`}>{book.subject} </Link>
+                <Link to={{ pathname: `/ReadDetail/${book.bookLisId}`, state: { subject: book.subject, index: book.index } }}>
+                  {book.subject}
+                </Link>
               </ListItem>
             ))}            
           </List>

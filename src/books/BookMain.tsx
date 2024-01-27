@@ -53,20 +53,20 @@ const BookMain: React.FC = () => {
 
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get('https://booksapi-orxz.onrender.com/books');
+        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/books');
         return response.data;
       };
   
       const fetchNote = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/note');
+        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/note');
         return response.data;
       };
       const fetchTate = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/type');
+        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/type');
         return response.data;
       };
       const fetchAudio = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/audio');
+        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/audio');
         return response.data;
       };      
       Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
