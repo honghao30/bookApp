@@ -46,7 +46,8 @@ const BookSubList: React.FC = () => {
               [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
-                <Link to={{ pathname: `/ReadDetail/${book.bookLisId}`, state: { subject: book.subject, index: book.index } }}>
+                {/* <Link to={{ pathname: `/ReadDetail/${book.bookLisId}`, state: { subject: book.subject, index: book.index } }}> */}
+                <Link to={`/ReadDetail/${book.bookLisId}`} state={{ cates: book.subject }}>
                   {book.subject}
                 </Link>
               </ListItem>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
+import parse from 'html-react-parser';
 
 const List = styled.ul `
   display: block;
@@ -18,12 +19,16 @@ const SubTitle = styled.p `
   padding: 15px 0;
   margin-bottom: 20px;
 `
+const BookContent = styled.div `
+  font-size: 18px;
+  line-height:28px;
+  margin-bottom: 10px;
+`
 const ReadDetail: React.FC = () => {  
   const [book, setBook] = useState(null);
   const { bookLisId } = useParams();
   const location = useLocation();
-  const subject = location.state ? location.state.subject : null;
-  const index = location.state ? location.state.index : null;
+  const cates = location.state.cates;
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -41,9 +46,14 @@ const ReadDetail: React.FC = () => {
   return (
     <div className='book-content'>
       <SubTitle>
-        {subject ? subject : 'Loading...'}{index ? index : ''}
+        {cates}
       </SubTitle>
-      {book}
+      {book.map((book: {
+        [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
+}, index: Key | null | undefined) => (
+        <BookContent key={index} dangerouslySetInnerHTML={{ __html: book.content }} />        
+      ))}   
+     
     </div>
   )
 }
