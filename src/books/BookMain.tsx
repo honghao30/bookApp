@@ -53,7 +53,7 @@ const BookMain: React.FC = () => {
 
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/books');
+        const response = await axios.get('https://booksapi-orxz.onrender.com/books');
         return response.data;
       };
   

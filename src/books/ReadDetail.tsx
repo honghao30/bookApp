@@ -1,110 +1,57 @@
 import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import InsetList from './List';
-import NoteList from './NoteList';
-import OtherList from './TapeList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+import { Link, useParams, useLocation } from 'react-router-dom';
+import styled from "styled-components";
+const List = styled.ul `
+  display: block;
+`;
+const ListItem = styled.li `
+  font-size: 15px;
+  padding: 6px 0;
+`
+const SubTitle = styled.p `
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+  margin-bottom: 20px;
+`
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-const BookMain: React.FC = () => {
-    const [value, setValue] = React.useState(0);
-    const [bookList, setBookList] = useState([]);
-    const [noteList, setNoteList] = useState([]);   
-    const [tapeList, setTapeList] = useState([]);
-    const [audioList, setAudioList] = useState([]);
-
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-      setValue(newValue);
-    };    
-
+const BookSubList: React.FC = () => {  
+    const [book, setBook] = useState(null);
+    const { book_id } = useParams();
+    const location = useLocation();
+    const cates = location.state.cates;
+    
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/books');
-        return response.data;
+        const response = await axios.get(`https://booksapi-orxz.onrender.com/bookList0${book_id}`);
+        setBook(response.data);
       };
-  
-      const fetchNote = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/note');
-        return response.data;
-      };
-      const fetchTate = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/type');
-        return response.data;
-      };
-      const fetchAudio = async () => {
-        const response = await axios.get('https://factual-trail-jute.glitch.me/audio');
-        return response.data;
-      };      
-      Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
-        .then(([bookData, noteData, tapeData, audioData]) => {
-          setBookList(bookData);
-          setNoteList(noteData);
-          setTapeList(tapeData);
-          setAudioList(audioData);
-        })
-        .catch(error => console.error('Error fetching data: ', error));
-    }, []);
+      fetchBook();
+    }, [book_id]);
+
+    if (!book) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div className='book-content'>
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs">
-                <Tab label="진리책자" {...a11yProps(0)} />
-                <Tab label="친필노트" {...a11yProps(1)} />
-                <Tab label="육성설교" {...a11yProps(2)} />
-                <Tab label="오디오북" {...a11yProps(3)} />
-            </Tabs>
-            </Box>
-            <CustomTabPanel value={value} index={0}>
-              <InsetList dataList={bookList} />
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-              <NoteList noteList={noteList} />
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-              <OtherList otherList={tapeList} />
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={3}>
-              <OtherList otherList={audioList} />
-            </CustomTabPanel>        
-        </Box>
+        <SubTitle>
+          {cates}
+        </SubTitle>
+           <List>
+            {book.map((book: {
+              [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
+      }, index: Key | null | undefined) => (
+              <ListItem key={index}>
+                <Link to={`/DetailList/${book.book_id}`}>{book.subject} </Link>
+              </ListItem>
+            ))}            
+          </List>
       </div>
     )
 }
 
-export default BookMain
+export default BookSubList;
