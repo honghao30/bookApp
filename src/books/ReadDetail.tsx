@@ -23,6 +23,7 @@ const BookContent = styled.div `
   font-size: 18px;
   line-height:28px;
   margin-bottom: 10px;
+  padding-bottom: 70px;
 `
 const ReadDetail: React.FC = () => {  
   const [book, setBook] = useState(null);
@@ -32,7 +33,7 @@ const ReadDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
-      const response = await axios.get(`https://tasty-tricolor-tango.glitch.me/bookcontent${bookLisId}`);
+      const response = await axios.get(`https://various-sable-background.glitch.me/bookcontent${bookLisId}`);
       console.log(response.data);
       setBook(response.data);
     };
