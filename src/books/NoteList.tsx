@@ -1,4 +1,5 @@
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const NoteList: React.FC = ({ noteList }) => {
@@ -17,7 +18,9 @@ const ListItem = styled.li `
         [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
 }, index: Key | null | undefined) => (
         <ListItem key={index}>
-          {note.title || note.subject} 
+          <Link to={`/DetailListNote/${note.noteId}`} state={{ cates: note.title }}>          
+            {note.title} 
+          </Link>
         </ListItem>
       ))}            
     </List>
