@@ -12,6 +12,7 @@ import Form from '../pages/Form'
 import Layout from '../layout/layout';
 import OnlyBodyLy from '../layout/onlyBodyLy';
 import BookLayout from '../layout/BookLayout';
+import BookMainLayout from '../layout/BookMainLayout';
 
 // BOOK
 import BookMain from '../books/BookMain'
@@ -34,7 +35,7 @@ function CommonRouter() {
         <Route element={<BookLayout />}>          
           <Route path="/Form" element={<Form />}></Route>             
         </Route>   
-        <Route element={<BookLayout />}>          
+        <Route element={<BookMainLayout />}>          
           <Route path="/BookMain" element={<BookMain />}></Route>             
         </Route>   
         <Route element={<BookLayout />}>          

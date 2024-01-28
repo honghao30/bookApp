@@ -2,65 +2,64 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
-import Accordion, { AccordionSlots } from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Fade from '@mui/material/Fade';
 import styled from "styled-components";
 
-export default function AccordionUsage({ audioList }) {
-  const [expanded, setExpanded] = React.useState(false);
+const List = styled.ul `
+  display: block;
+`;
+const ListItem = styled.li `
+  font-size: 15px;
+  padding: 6px 0;
+`
+const SubTitle = styled.p `
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+  margin-bottom: 20px;
+`
 
-  const handleExpansion = () => {
-    setExpanded((prevExpanded) => !prevExpanded);
-  };  
-  return (
-    <div>ddd
-    {/* {member.map((v, idx) => (
-      <Accordion
-        key={v.id}
-        expanded={expanded === `panel_${idx}`}
-        onChange={handleChange(`panel_${idx}`)}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <div>id:{v.id}</div>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div>
-            name : {v.name}, password : {v.password}
-          </div>
-          <br />
-        </AccordionDetails>
-        <TextField
-          id="outlined-number"
-          label="Number"
-          type="number"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">조각</InputAdornment>
-            ),
-          }}
-        />
-        <Divider />
-        <AccordionActions>
-          <Button size="small" onClick={() => alert("cancel")}>
-            취소
-          </Button>
-          <Button
-            size="small"
-            color="primary"
-            onClick={(event) => registerClick(event, idx)}
-          >
-            판매등록
-          </Button>
-        </AccordionActions>
-      </Accordion>
-    ))} */}
-  </div>
-  );
+const DetailListAudio: React.FC = () => {  
+    const [audioBook, setAudioBook] = useState(null);
+    const { audioId } = useParams();
+    const location = useLocation();
+    const { cates, index } = location.state;
+    
+    useEffect(() => {
+      const fetchBook = async () => {
+        const response = await axios.get(`https://nosy-billowy-bun.glitch.me/audioCont${audioId}`);
+        setAudioBook(response.data);
+        console.log(response.data)
+      };
+      fetchBook();
+    }, [audioId]);
+
+    if (!audioBook) {
+      return <div>Loading...</div>;
+    }
+
+    return (
+      <div className='book-content'>
+        <SubTitle>
+          {cates}
+        </SubTitle>
+           <List>
+            {audioBook.map((book, index) => (
+              <ListItem key={index}>
+                  {/* {book.title}       */}
+                  <div>                    
+                  <iframe 
+                    src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
+                    title="오디오 플레이어" 
+                    width="100%" 
+                    height="160px">
+                </iframe>                    
+                  </div>          
+              </ListItem>
+            ))}            
+          </List>
+      </div>
+    )
 }
+
+export default DetailListAudio;

@@ -3,14 +3,13 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import IconButton from '@mui/material/IconButton';
-import { useNavigate } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
 
-const TopUtil: React.FC = () => {
-  const navigate = useNavigate();
-  const handleBackClick = () => {
-    navigate(-1);
+const TopUtilMain: React.FC = () => {  
+
+  const handleMenuClick = () => {
+
   };
 
   return (
@@ -21,11 +20,11 @@ const TopUtil: React.FC = () => {
               size="large"
               edge="start"
               color="inherit"
-              aria-label="back"
+              aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={handleBackClick}
+              onClick={handleMenuClick}
             >
-              <ArrowBackIosIcon />
+              <MenuIcon />
             </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             진리책자 도서관
@@ -36,4 +35,4 @@ const TopUtil: React.FC = () => {
   );
 };
 
-export default TopUtil;
+export default TopUtilMain;
