@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import InsetList from './List';
 import NoteList from './NoteList';
 import OtherList from './TapeList';
+import AudioLists from './AudioList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 interface TabPanelProps {
@@ -66,7 +67,7 @@ const BookMain: React.FC = () => {
         return response.data;
       };
       const fetchAudio = async () => {
-        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/audio');
+        const response = await axios.get('https://nosy-billowy-bun.glitch.me/audioList');
         return response.data;
       };      
       Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
@@ -100,7 +101,7 @@ const BookMain: React.FC = () => {
               <OtherList otherList={tapeList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-              <OtherList otherList={audioList} />
+              <AudioLists audioList={audioList} />
             </CustomTabPanel>        
         </Box>
       </div>

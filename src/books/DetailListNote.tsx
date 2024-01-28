@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
+
 const List = styled.ul `
   display: block;
 `;
@@ -22,12 +23,13 @@ const DetailListNote: React.FC = () => {
     const [book, setBook] = useState(null);
     const { book_id } = useParams();
     const location = useLocation();
-    const cates = location.state.cates;
+    const { cates, index } = location.state;
     
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get(`https://tasty-tricolor-tango.glitch.me/note`);
+        const response = await axios.get(`https://nosy-billowy-bun.glitch.me/note`);
         setBook(response.data);
+        console.log(response.data)
       };
       fetchBook();
     }, [book_id]);
@@ -40,18 +42,16 @@ const DetailListNote: React.FC = () => {
       <div className='book-content'>
         <SubTitle>
           {cates}
-        </SubTitle>ddd
-           {/* <List>
-            {book.map((book: {
-              [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
-      }, index: Key | null | undefined) => (
+        </SubTitle>
+           <List>
+            {book[index].titles.map((book, index) => (
               <ListItem key={index}>                
-                <Link to={`/ReadDetail/${book.bookLisId}`} state={{ cates: book.subject }}>
-                  {book.subject}
+                <Link to={`/ReadNoteDetail/${book.typeId}`} state={{ cates: book.title, index: index }}>
+                  {book.title}
                 </Link>
               </ListItem>
             ))}            
-          </List> */}
+          </List>
       </div>
     )
 }

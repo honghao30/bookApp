@@ -8,7 +8,7 @@ import CommonRouter  from './router/CommonRouter'
 
 function App() {
   useEffect(() => {
-    // console.log(authService);
+    
     
   });  
   return (

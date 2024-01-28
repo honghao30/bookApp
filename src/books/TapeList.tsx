@@ -1,4 +1,5 @@
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const OtherList: React.FC = ({ otherList }) => {
@@ -17,10 +18,13 @@ const ListItem = styled.li `
         [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
 }, index: Key | null | undefined) => (
         <ListItem key={index}>
-          {book.subject} 
+          <Link to={`/ReadTapeDetail/${book.typeId}`} state={{ cates: book.subject, index: index }}>
+            {book.subject} 
+          </Link>
         </ListItem>
       ))}            
     </List>
+    
   );
 }
 export default OtherList

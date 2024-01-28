@@ -18,6 +18,9 @@ import BookMain from '../books/BookMain'
 import BookSubList from '../books/DetailList'
 import ReadDetail from '../books/ReadDetail'
 import DetailListNote from '../books/DetailListNote'
+import ReadNoteDetail from '../books/ReadNoteDetail'
+import ReadTapeDetail from '../books/ReadTapeDetail'
+import DetailListAudio from '../books/DetailListAudio'
 
 function CommonRouter() {
     return (
@@ -42,7 +45,16 @@ function CommonRouter() {
         </Route>   
         <Route element={<BookLayout />}>          
           <Route path="/DetailListNote/:noteId" element={<DetailListNote />} />                      
-        </Route>                               
+        </Route>      
+        <Route element={<BookLayout />}>          
+          <Route path="/ReadNoteDetail/:noteSubId" element={<ReadNoteDetail />} />                      
+        </Route> 
+        <Route element={<BookLayout />}>          
+          <Route path="/ReadTapeDetail/:noteSubId" element={<ReadTapeDetail />} />                      
+        </Route>  
+        <Route element={<BookLayout />}>          
+          <Route path="/DetailListAudio/:audioId" element={<DetailListAudio />} />                      
+        </Route>                                                
       </Routes>
     )
   }
