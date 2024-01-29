@@ -20,7 +20,7 @@ import Box from '@mui/material/Box';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 
 const BottomNav: React.FC = () => {
-  const [value, setValue] = React.useState('recents');
+  const [value, setValue] = useState('recents');
   const navigate = useNavigate();
   const [drawer, setDrawer] = useState(false);
   const openDrawer = useCallback(() => setDrawer(true), []);
@@ -38,8 +38,10 @@ const BottomNav: React.FC = () => {
 
     if (currentIndex === -1) {
       newChecked.push(value);
+      document.body.classList.add('dark')      
     } else {
       newChecked.splice(currentIndex, 1);
+      document.body.classList.remove('dark')
     }
 
     setChecked(newChecked);
