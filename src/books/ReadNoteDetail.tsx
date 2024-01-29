@@ -5,6 +5,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -41,7 +43,11 @@ const ReadNoteDetail: React.FC = () => {
   }, [noteSubId]);
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <div>
+          <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+    </div>;
   }
 
   return (

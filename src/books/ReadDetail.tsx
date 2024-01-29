@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import parse from 'html-react-parser';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const List = styled.ul `
   display: block;
@@ -41,7 +43,11 @@ const ReadDetail: React.FC = () => {
   }, [bookLisId]);
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <div>
+          <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+    </div>;
   }
 
   return (

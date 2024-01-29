@@ -9,6 +9,8 @@ import { SxProps } from '@mui/material/styles';
 import Zoom from '@mui/material/Zoom';
 import { green } from '@mui/material/colors';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -84,7 +86,11 @@ const ReadTapeDetail: React.FC = () => {
       });
   };
   if (!book) {
-    return <div>Loading...</div>;
+    return <div>
+          <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+    </div>;
   }
   return (
     <div className='book-content'>
