@@ -4,8 +4,13 @@ import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import parse from 'html-react-parser';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import { useTheme } from '@mui/material/styles';
+import { SxProps } from '@mui/material/styles';
+import Zoom from '@mui/material/Zoom';
+import { green } from '@mui/material/colors';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Loading from './compornents/Loading';
 
 const List = styled.ul `
   display: block;
@@ -27,11 +32,37 @@ const BookContent = styled.div `
   margin-bottom: 10px;
   padding-bottom: 70px;
 `
+const fabStyle = {
+  position: 'fixed',
+  bottom: 56,
+  right: 16,
+};
+
+const fabGreenStyle = {
+  color: 'common.white',
+  bgcolor: green[500],
+  '&:hover': {
+    bgcolor: green[600],
+  },
+};
+
 const ReadDetail: React.FC = () => {  
   const [book, setBook] = useState(null);
   const { bookLisId } = useParams();
   const location = useLocation();
   const cates = location.state.cates;
+  const [value, setValue] = useState(0);
+  const theme = useTheme();
+  const [showTopBtn, setShowTopBtn] = useState(false);
+
+  const fabs = [
+    {
+      color: 'primary' as 'primary',
+      sx: fabStyle as SxProps,
+      icon: <KeyboardArrowUpIcon />,
+      label: '위로',
+    }
+  ];
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -40,13 +71,25 @@ const ReadDetail: React.FC = () => {
       setBook(response.data);
     };
     fetchBook();
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 400) {
+          setShowTopBtn(true);
+      } else {
+          setShowTopBtn(false);
+      }
+  });     
   }, [bookLisId]);
+
+  const goToTop = () => {
+      window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+      });
+  };
 
   if (!book) {
     return <div>
-          <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-            <CircularProgress />
-          </Box>
+          <Loading />
     </div>;
   }
 
@@ -55,6 +98,16 @@ const ReadDetail: React.FC = () => {
       <SubTitle>
         {cates}
       </SubTitle>
+      {showTopBtn && fabs.map((fab, index) => (
+        <Zoom
+          key={fab.color}
+          in={value === index}
+        >
+          <Fab sx={fab.sx} aria-label={fab.label} color={fab.color} size="medium" onClick={goToTop}>
+            {fab.icon}
+          </Fab>
+        </Zoom>
+      ))}      
       {book.map((book: {
         [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
 }, index: Key | null | undefined) => (

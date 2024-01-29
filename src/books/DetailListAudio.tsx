@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import Loading from './compornents/Loading';
 
 const List = styled.ul `
   display: block;
@@ -38,9 +37,7 @@ const DetailListAudio: React.FC = () => {
 
     if (!audioBook) {
       return <div>
-            <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-              <CircularProgress />
-            </Box>
+           <Loading />
       </div>;      
     }
 
