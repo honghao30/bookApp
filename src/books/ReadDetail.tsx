@@ -54,7 +54,6 @@ const ReadDetail: React.FC = () => {
   const location = useLocation();
   const { cates, bookTitle } = location.state || { cates: '', bookTitle: '' };
   const [value, setValue] = useState(0);
-  const theme = useTheme();
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   const fabs = [
@@ -68,7 +67,7 @@ const ReadDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
-      const response = await axios.get(`https://various-sable-background.glitch.me/bookcontent${bookLisId}`);
+      const response = await axios.get(`https://nosy-billowy-bun.glitch.me/bookcontent${bookLisId}`);
       console.log(response.data);
       setBook(response.data);
     };
@@ -97,7 +96,7 @@ const ReadDetail: React.FC = () => {
 
   return (
     <>
-      <TopUtilDetail bookTitle={bookTitle} />
+      {book && <TopUtilDetail book={book} />}
       <div className='book-content'>
         <SubTitle>
           {cates}

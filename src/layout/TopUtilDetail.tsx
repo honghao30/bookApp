@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 
-const TopUtil: React.FC<{ bookTitle: string }> = ({ bookTitle }) => {
+const TopUtilDetail: React.FC<{ book: any }> = ({ book }) => {
   const navigate = useNavigate();
   const handleMenuClick = () => {
     navigate(1);
@@ -28,7 +28,7 @@ const TopUtil: React.FC<{ bookTitle: string }> = ({ bookTitle }) => {
               <MenuIcon />
             </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {bookTitle}
+              {book.title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -36,4 +36,4 @@ const TopUtil: React.FC<{ bookTitle: string }> = ({ bookTitle }) => {
   );
 };
 
-export default TopUtil;
+export default TopUtilDetail;
