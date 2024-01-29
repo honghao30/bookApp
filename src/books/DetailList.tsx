@@ -56,10 +56,11 @@ const BookSubList: React.FC = () => {
                 {/* <Link to={{ pathname: `/ReadDetail/${book.bookLisId}`, state: { subject: book.subject, index: book.index } }}> */}
                 <Link to={{
                   pathname: `/ReadDetail/${book.bookLisId}`,
-                  state: { cates: book.subject, bookTitle: cates }
+                  state: { cates: cates, bookTitle: book.subject }
                 }}>
                   {book.subject}
                 </Link>
+
               </ListItem>
             ))}            
           </List>
