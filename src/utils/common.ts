@@ -44,3 +44,26 @@ export const getTodayDate = (format: string) => {
            return TodayDateFullDash;
    }
 }
+
+// d-day
+export default class DDayCounter {
+    dates: Date[];
+  
+    constructor(dates: string[]) {
+      this.dates = dates.map(date => new Date(date));
+      this.dates.sort((a: Date, b: Date) => a.getTime() - b.getTime());
+    }
+  
+    getNextEvent(): { date: Date; dDay: number } | null {
+      const today = new Date();
+      for (let i = 0; i < this.dates.length; i++) {
+        const diffTime = this.dates[i].getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays <= 30) {
+          return { date: this.dates[i], dDay: diffDays };
+        }
+      }
+      return null;
+    }
+  }
+    

@@ -6,6 +6,7 @@ import { isEmail, passwordValidator} from '../../utils/validation';
 import Loading from '../ui_elements/Loading';
 import { userState, isLoggedInState, login } from "../../recoil/authAtom";
 import { useSetRecoilState } from 'recoil';
+import DDayCount from '../../books/compornents/dday'
 
 // 로그인 페이지 유효성검사 hook 작업
 // json 연결
@@ -112,6 +113,7 @@ const LoginForm: React.FC  = () => {
             <div className='sign-guide__wrap'>                
                 <Link to="/bookMain">Please Login</Link>
             </div>
+            <DDayCount />
             <div className='manage__info'>                
                 <Link to="http://www.ncpcog.co.kr" target='_blank'>Contact to Manage?</Link> 
             </div>
