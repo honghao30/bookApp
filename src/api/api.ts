@@ -1,13 +1,9 @@
 import axios from 'axios'
 
-const createInstance = (url: string, apiKey: string | null) => {
-    return axios.create({
-        baseURL: url,
-        params: {
-            api_key: apiKey,
-            language: "ko-KR"
-        },
-    });
-}
+const fetchData = async (endpoint: string | number) => {
+    const url = process.env.REACT_APP_API_URL! + endpoint;
+    const response = await axios.get(url);
+    return response.data;
+};
 
-export default createInstance
+export default fetchData;
