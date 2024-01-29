@@ -4,15 +4,11 @@ import { isLogin } from '../utils/common';
 
 // 레이아웃
 import Intro from '../pages/Intro'
-// import Signup from '../pages/member/Signup'
-// import Edit from '../pages/member/Edit'
-// import Mypage from '../pages/member/Mypage'
-// import Main from '../pages/Main'
 import Form from '../pages/Form'
-import Layout from '../layout/layout';
 import OnlyBodyLy from '../layout/onlyBodyLy';
 import BookLayout from '../layout/BookLayout';
 import BookMainLayout from '../layout/BookMainLayout';
+import BookDetail from '../layout/BookDetail';
 
 // BOOK
 import BookMain from '../books/BookMain'

@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import TopUtil from "../books/TopUtil"
-import BottomNav from "../books/BottomNav"
+import TopUtil from "./TopUtil"
+import BottomNav from "./BottomNav"
 
 const Layout = () => {
     return (

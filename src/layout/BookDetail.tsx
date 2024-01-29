@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import TopUtilMain from "./TopUtilMain"
 import BottomNav from "./BottomNav"
 
-const BookMainLayout = () => {
+const BookDetail = () => {
     return (
         <>
             <TopUtilMain />
@@ -12,4 +12,4 @@ const BookMainLayout = () => {
     );
 };
 
-export default BookMainLayout;
+export default BookDetail;
