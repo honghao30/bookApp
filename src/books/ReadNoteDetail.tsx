@@ -34,8 +34,7 @@ const ReadNoteDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
-      const response = await axios.get(`https://nosy-billowy-bun.glitch.me/notecontent${noteSubId}`);
-      console.log(response.data);
+      const response = await axios.get(`https://nosy-billowy-bun.glitch.me/notecontent${noteSubId}`);      
       setBook(response.data);
     };
     fetchBook();
