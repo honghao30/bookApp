@@ -11,6 +11,8 @@ import Zoom from '@mui/material/Zoom';
 import { green } from '@mui/material/colors';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Loading from './compornents/Loading';
+import BottomNav from "../layout/BottomNav"
+import TopUtilDetail from "../layout/TopUtilDetail"
 
 const List = styled.ul `
   display: block;
@@ -50,7 +52,7 @@ const ReadDetail: React.FC = () => {
   const [book, setBook] = useState(null);
   const { bookLisId } = useParams();
   const location = useLocation();
-  const cates = location.state.cates;
+  const { cates, bookTitle } = location.state || { cates: '', bookTitle: '' };
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -94,27 +96,31 @@ const ReadDetail: React.FC = () => {
   }
 
   return (
-    <div className='book-content'>
-      <SubTitle>
-        {cates}
-      </SubTitle>
-      {showTopBtn && fabs.map((fab, index) => (
-        <Zoom
-          key={fab.color}
-          in={value === index}
-        >
-          <Fab sx={fab.sx} aria-label={fab.label} color={fab.color} size="medium" onClick={goToTop}>
-            {fab.icon}
-          </Fab>
-        </Zoom>
-      ))}      
-      {book.map((book: {
-        [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
-}, index: Key | null | undefined) => (
-        <BookContent key={index} dangerouslySetInnerHTML={{ __html: book.content }} />        
-      ))}   
-     
-    </div>
+    <>
+      <TopUtilDetail bookTitle={bookTitle} />
+      <div className='book-content'>
+        <SubTitle>
+          {cates}
+        </SubTitle>
+        {showTopBtn && fabs.map((fab, index) => (
+          <Zoom
+            key={fab.color}
+            in={value === index}
+          >
+            <Fab sx={fab.sx} aria-label={fab.label} color={fab.color} size="medium" onClick={goToTop}>
+              {fab.icon}
+            </Fab>
+          </Zoom>
+        ))}      
+        {book.map((book: {
+          [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
+  }, index: Key | null | undefined) => (
+          <BookContent key={index} dangerouslySetInnerHTML={{ __html: book.content }} />        
+        ))}   
+      
+      </div>
+      <BottomNav />  
+    </> 
   )
 }
 
