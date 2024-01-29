@@ -110,13 +110,13 @@ const BottomNav: React.FC = () => {
                 <ListItemIcon>
                   <AccessTimeFilledIcon />
                 </ListItemIcon>
-                <ListItemText id="switch-list-label-wifi" primary="다크모드" />
+                <ListItemText id="switch-list-label-dark-mod" primary="다크모드" />
                 <Switch
                   edge="end"
                   onChange={handleToggle('darkMod')}
                   checked={checked.indexOf('darkMod') !== -1}
                   inputProps={{
-                    'aria-labelledby': 'switch-list-label-wifi',
+                    'aria-labelledby': 'switch-list-label-dark-mod',
                   }}
                 />
               </ListItem>
@@ -126,7 +126,7 @@ const BottomNav: React.FC = () => {
                     폰트 사이즈
                   </Typography>  
                   <Grid item xs>
-                    <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+                    <Slider defaultValue={16} aria-label="Default" valueLabelDisplay="auto" />
                   </Grid>  
                 </Box>           
               </ListItem>
