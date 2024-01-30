@@ -39,7 +39,9 @@ const fabStyle = {
   bottom: 56,
   right: 16,
 };
-
+const AudioSection = styled.div`
+  padding: 30px 0;
+`;
 const fabGreenStyle = {
   color: 'common.white',
   bgcolor: green[500],
@@ -50,10 +52,9 @@ const fabGreenStyle = {
 
 const ReadDetail: React.FC = () => {  
   const [book, setBook] = useState(null);
-  const { bookLisId } = useParams();
-  const location = useLocation();
-  const { cates, bookTitle } = location.state || { cates: '', bookTitle: '' };
   const [value, setValue] = useState(0);
+  const location = useLocation();
+  const { bookId, cates, index } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   const fabs = [
@@ -67,9 +68,16 @@ const ReadDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
-      const response = await axios.get(`https://nosy-billowy-bun.glitch.me/bookcontent${bookLisId}`);
-      console.log(response.data);
-      setBook(response.data);
+      const response = await axios.get(`/db/book${bookId}.json`);
+      const data = response.data;       
+      localStorage.setItem(`book${bookId}`, JSON.stringify(data));   
+      const booksData = JSON.parse(localStorage.getItem(`book${bookId}`));
+      if(booksData) {   
+        setBook(booksData[`book${bookId}`]);
+      }
+      // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/bookcontent${bookLisId}`);
+      // console.log(response.data);
+      // setBook(response.data);
     };
     fetchBook();
     window.addEventListener("scroll", () => {
@@ -79,7 +87,7 @@ const ReadDetail: React.FC = () => {
           setShowTopBtn(false);
       }
   });     
-  }, [bookLisId]);
+  }, [bookId]);
 
   const goToTop = () => {
       window.scrollTo({
@@ -95,8 +103,7 @@ const ReadDetail: React.FC = () => {
   }
 
   return (
-    <>
-      {book && <TopUtilDetail book={book} />}
+    <>      
       <div className='book-content'>
         <SubTitle>
           {cates}
@@ -110,13 +117,12 @@ const ReadDetail: React.FC = () => {
               {fab.icon}
             </Fab>
           </Zoom>
-        ))}      
-        {book.map((book: {
-          [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
-  }, index: Key | null | undefined) => (
-          <BookContent key={index} dangerouslySetInnerHTML={{ __html: book.content }} />        
-        ))}   
-      
+        ))}     
+
+        <AudioSection>
+        <iframe src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book[index].url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} title="오디오 플레이어" width="100%" height="60px"></iframe>
+        </AudioSection>
+       <BookContent dangerouslySetInnerHTML={{ __html: book[index].content }} />  
       </div>
       <BottomNav />  
     </> 

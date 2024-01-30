@@ -23,17 +23,25 @@ const SubTitle = styled.p `
 
 const BookSubList: React.FC = () => {  
     const [book, setBook] = useState(null);
-    const { book_id } = useParams();
+    const { bookId } = useParams();
     const location = useLocation();
     const cates = location.state.cates;
     
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get(`https://tasty-tricolor-tango.glitch.me/bookList${book_id}`);
-        setBook(response.data);
+        const response = await axios.get(`/db/book${bookId}.json`);
+        const data = response.data;           
+        localStorage.setItem(`book${bookId}`, JSON.stringify(data));
+        const bookData = JSON.parse(localStorage.getItem(`book${bookId}`));
+        if(bookData) {   
+          setBook(bookData.book4);
+          console.log('상세2', bookData);
+        }          
+        // const response = await axios.get(`https://tasty-tricolor-tango.glitch.me/bookList${bookId}`);
+        // setBook(response.data);
       };
       fetchBook();
-    }, [book_id]);
+    }, [bookId]);
 
     if (!book) {
       return <div>
@@ -54,9 +62,10 @@ const BookSubList: React.FC = () => {
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
                 {/* <Link to={{ pathname: `/ReadDetail/${book.bookLisId}`, state: { subject: book.subject, index: book.index } }}> */}
-                <Link to={`/ReadDetail/${book.bookLisId}`} state={{ cates: book.subject }}>
+                <Link to={`/ReadDetail/${book.Id}`}  state={{ cates: book.subject, index: index, bookId: bookId }}>
                   {book.subject}
                 </Link>
+
               </ListItem>
             ))}            
           </List>
