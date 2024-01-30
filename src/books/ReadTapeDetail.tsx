@@ -70,8 +70,8 @@ const ReadTapeDetail: React.FC = () => {
       const response = await axios.get(`/db/${typeId}.json`);
       const data = response.data;   
       console.log('1',data);     
-      localStorage.setItem(`note${typeId}`, JSON.stringify(data));
-      const tapeData = JSON.parse(localStorage.getItem(`note${typeId}`));
+      localStorage.setItem(`tape${typeId}`, JSON.stringify(data));
+      const tapeData = JSON.parse(localStorage.getItem(`tape${typeId}`));
       if(tapeData) {   
         setTape(tapeData);
         console.log(tapeData);

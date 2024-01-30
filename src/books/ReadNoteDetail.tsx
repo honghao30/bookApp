@@ -30,17 +30,25 @@ const ButtonArea = styled.div `
 
 const ReadNoteDetail: React.FC = () => {  
   const [book, setBook] = useState(null);
-  const { noteSubId } = useParams();
+  const { bookId } = useParams();
   const location = useLocation();
   const { cates, index } = location.state;
 
   useEffect(() => {
-    const fetchBook = async () => {
-      const response = await axios.get(`https://nosy-billowy-bun.glitch.me/notecontent${noteSubId}`);      
-      setBook(response.data);
+    const fetchBook = async () => {   
+      const response = await axios.get(`/db/note${bookId}.json`);
+      const data = response.data;       
+      localStorage.setItem(`note${bookId}`, JSON.stringify(data));   
+      const noteData = JSON.parse(localStorage.getItem(`note${bookId}`));
+      if(noteData) {   
+        setBook(noteData);
+        console.log('로컬', noteData);
+      }         
+      // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/notecontent${noteSubId}`);      
+      // setBook(response.data);
     };
     fetchBook();
-  }, [noteSubId]);
+  }, [bookId]);
 
   if (!book) {
     return <div>
@@ -53,9 +61,9 @@ const ReadNoteDetail: React.FC = () => {
   return (
     <div className='book-content'>
       <SubTitle>
-        {cates}
+        {book.note1[index].subject}
       </SubTitle>
-      <BookContent dangerouslySetInnerHTML={{ __html: book[index].content }} />  
+      <BookContent dangerouslySetInnerHTML={{ __html: book.note1[index].content }} />  
       {/* <ButtonArea>
         <Stack direction="row">
           <Button variant="outlined">성경구절 전체보기</Button>

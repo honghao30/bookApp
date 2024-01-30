@@ -23,18 +23,26 @@ const SubTitle = styled.p `
 
 const DetailListNote: React.FC = () => {  
     const [book, setBook] = useState(null);
-    const { book_id } = useParams();
+    const { bookId } = useParams();
     const location = useLocation();
     const { cates, index } = location.state;
     
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get(`https://nosy-billowy-bun.glitch.me/note`);
-        setBook(response.data);
-        console.log(response.data)
+        const response = await axios.get(`/db/${bookId}.json`);
+        const data = response.data;           
+        localStorage.setItem(`note${bookId}`, JSON.stringify(data));
+        const noteData = JSON.parse(localStorage.getItem(`note${bookId}`));
+        if(noteData) {   
+          setBook(noteData);
+          console.log(noteData);
+        }        
+        // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/note`);
+        // setBook(response.data);
+        // console.log(response.data)
       };
       fetchBook();
-    }, [book_id]);
+    }, [bookId]);
 
     if (!book) {
       return <div>
@@ -50,10 +58,10 @@ const DetailListNote: React.FC = () => {
           {cates}
         </SubTitle>
            <List>
-            {book[index].titles.map((book, index) => (
+            {book.note1.map((book, index) => (
               <ListItem key={index}>                
-                <Link to={`/ReadNoteDetail/${book.typeId}`} state={{ cates: book.title, index: index }}>
-                  {book.title}
+                <Link to={`/ReadNoteDetail/${book.bookId}`} state={{ cates: book.title, index: index }}>
+                  {book.subject}
                 </Link>
               </ListItem>
             ))}            
