@@ -28,7 +28,7 @@ const TopUtilDetail: React.FC<{ book: any }> = ({ book }) => {
               <MenuIcon />
             </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {book.title}
+              {book}
           </Typography>
         </Toolbar>
       </AppBar>

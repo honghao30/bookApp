@@ -19,7 +19,7 @@ const ListItem = styled.li `
 }, index: Key | null | undefined) => (
         <ListItem key={index}>
           <Link to={`/DetailList/${book.book_id}`} state={{ cates: book.cates }}>
-            {book.cates}
+            {book.subject}
           </Link>
         </ListItem>
       ))}            

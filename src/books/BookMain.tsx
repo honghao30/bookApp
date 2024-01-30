@@ -53,31 +53,40 @@ const BookMain: React.FC = () => {
     };    
 
     useEffect(() => {
-      const fetchBook = async () => {
-        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/books');
-        return response.data;
-      };
+      const listData = JSON.parse(localStorage.getItem('list'));
+      if(listData) {
+        setBookList(listData.book);
+        setNoteList(listData.note);
+        setTapeList(listData.tape);
+        setAudioList(listData.audioList);
+        console.log(listData.tape);
+      }
+      // api 호출 방식 변경
+      // const fetchBook = async () => {
+      //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/books');
+      //   return response.data;
+      // };
   
-      const fetchNote = async () => {
-        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/note');
-        return response.data;
-      };
-      const fetchTate = async () => {
-        const response = await axios.get('https://tasty-tricolor-tango.glitch.me/type');
-        return response.data;
-      };
-      const fetchAudio = async () => {
-        const response = await axios.get('https://nosy-billowy-bun.glitch.me/audioList');
-        return response.data;
-      };      
-      Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
-        .then(([bookData, noteData, tapeData, audioData]) => {
-          setBookList(bookData);
-          setNoteList(noteData);
-          setTapeList(tapeData);
-          setAudioList(audioData);
-        })
-        .catch(error => console.error('Error fetching data: ', error));
+      // const fetchNote = async () => {
+      //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/note');
+      //   return response.data;
+      // };
+      // const fetchTate = async () => {
+      //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/type');
+      //   return response.data;
+      // };
+      // const fetchAudio = async () => {
+      //   const response = await axios.get('https://nosy-billowy-bun.glitch.me/audioList');
+      //   return response.data;
+      // };      
+      // Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
+      //   .then(([bookData, noteData, tapeData, audioData]) => {
+      //     setBookList(bookData);
+      //     setNoteList(noteData);
+      //     setTapeList(tapeData);
+      //     setAudioList(audioData);
+      //   })
+      //   .catch(error => console.error('Error fetching data: ', error));
     }, []);
 
     return (
@@ -98,7 +107,7 @@ const BookMain: React.FC = () => {
               <NoteList noteList={noteList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              <OtherList otherList={tapeList} />
+              <OtherList tapeList={tapeList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
               <AudioLists audioList={audioList} />

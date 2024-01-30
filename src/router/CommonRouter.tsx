@@ -47,7 +47,7 @@ function CommonRouter() {
           <Route path="/ReadNoteDetail/:noteSubId" element={<ReadNoteDetail />} />                      
         </Route> 
         <Route element={<BookDetail />}>          
-          <Route path="/ReadTapeDetail/:noteSubId" element={<ReadTapeDetail />} />                      
+          <Route path="/ReadTapeDetail/:typeId" element={<ReadTapeDetail />} />                      
         </Route>  
         <Route element={<BookLayout />}>          
           <Route path="/DetailListAudio/:audioId" element={<DetailListAudio />} />                      

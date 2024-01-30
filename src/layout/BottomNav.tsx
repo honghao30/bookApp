@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const BottomNav: React.FC = () => {
   const [value, setValue] = useState('recents');
@@ -73,17 +74,17 @@ const BottomNav: React.FC = () => {
           icon={<TravelExploreIcon />}
           onClick={ alertMsg }
         />
-        {/* <BottomNavigationAction
+        <BottomNavigationAction
           label="오디오"
           value="오디오"
-          icon={<HeadsetIcon />}
-        /> */}
-      <BottomNavigationAction
+          icon={<VolumeUpIcon />}
+        />
+      {/* <BottomNavigationAction
           label="절기"
           value="절기"
           icon={<CalendarMonthIcon />}
           onClick={alertMsg2}
-        />      
+        />       */}
       <BottomNavigationAction
           label="설정"
           value="설정"

@@ -11,6 +11,8 @@ import { green } from '@mui/material/colors';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import BottomNav from "../layout/BottomNav"
+import TopUtilDetail from "../layout/TopUtilDetail"
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -24,6 +26,9 @@ const BookContent = styled.div `
   line-height:28px;
   margin-bottom: 10px;
   padding-bottom: 70px;
+`
+const youtubeSection = styled.div `
+
 `
 const ButtonArea = styled.div `
   margin: 20px 0;
@@ -46,7 +51,7 @@ const fabGreenStyle = {
 };
 
 const ReadTapeDetail: React.FC = () => {  
-  const [book, setBook] = useState(null);
+  const [tape, setTape] = useState(null);
   const { typeId } = useParams();
   const location = useLocation();
   const { cates, index } = location.state;
@@ -65,9 +70,16 @@ const ReadTapeDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
-      const response = await axios.get(`https://nosy-billowy-bun.glitch.me/tape`);
-      console.log(response.data);
-      setBook(response.data);
+      const response = await axios.get(`/db/${typeId}.json`);
+      const data = response.data;   
+      console.log('1',data);     
+      localStorage.setItem(`note${typeId}`, JSON.stringify(data));
+      const tapeData = JSON.parse(localStorage.getItem(`note${typeId}`));
+      if(tapeData) {   
+        setTape(tapeData);
+        console.log(tapeData);
+      }
+      // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/tape`);
     };
     fetchBook();
     window.addEventListener("scroll", () => {
@@ -85,7 +97,7 @@ const ReadTapeDetail: React.FC = () => {
           behavior: "smooth",
       });
   };
-  if (!book) {
+  if (!tape) {
     return <div>
           <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
             <CircularProgress />
@@ -94,6 +106,7 @@ const ReadTapeDetail: React.FC = () => {
   }
   return (
     <div className='book-content'>
+      <TopUtilDetail book={ "육성설교"} />
       <SubTitle>
         {cates}
       </SubTitle>
@@ -107,7 +120,11 @@ const ReadTapeDetail: React.FC = () => {
           </Fab>
         </Zoom>
       ))}
-      <BookContent dangerouslySetInnerHTML={{ __html: book[index].content }} />  
+        <div className='youtube-wrap'>
+        <iframe src={`https://www.youtube.com/embed/${tape.url}`} title={ tape.subject }></iframe>
+        </div>
+        <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} />  
+        <BottomNav />  
     </div>
   )
 }

@@ -81,3 +81,17 @@ body {
   font-size:18px;
   color:#fc2424;
 }
+
+.youtube-wrap {
+  padding-top: 56.5%;
+  position: relative;
+  margin-bottom: 50px;
+  iframe {
+    position: absolute;
+    left: 50%;
+    top:0;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+  }
+}

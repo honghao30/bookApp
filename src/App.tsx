@@ -10,7 +10,7 @@ import axios from 'axios'
 function App() {
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('./db/list.json');
+      const response = await axios.get('/db/list.json');
       const data = response.data;      
       localStorage.setItem('list', JSON.stringify(data));
     };
