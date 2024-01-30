@@ -27,9 +27,6 @@ const BookContent = styled.div `
   margin-bottom: 10px;
   padding-bottom: 70px;
 `
-const youtubeSection = styled.div `
-
-`
 const ButtonArea = styled.div `
   margin: 20px 0;
   display: flex;
@@ -105,27 +102,29 @@ const ReadTapeDetail: React.FC = () => {
     </div>;
   }
   return (
-    <div className='book-content'>
+    <>    
       <TopUtilDetail book={ "육성설교"} />
-      <SubTitle>
-        {cates}
-      </SubTitle>
-      {showTopBtn && fabs.map((fab, index) => (
-        <Zoom
-          key={fab.color}
-          in={value === index}
-        >
-          <Fab sx={fab.sx} aria-label={fab.label} color={fab.color} size="medium" onClick={goToTop}>
-            {fab.icon}
-          </Fab>
-        </Zoom>
-      ))}
-        <div className='youtube-wrap'>
-        <iframe src={`https://www.youtube.com/embed/${tape.url}`} title={ tape.subject }></iframe>
-        </div>
-        <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} />  
-        <BottomNav />  
-    </div>
+      <div className='book-content'>      
+        <SubTitle>
+          {cates}
+        </SubTitle>
+        {showTopBtn && fabs.map((fab, index) => (
+          <Zoom
+            key={fab.color}
+            in={value === index}
+          >
+            <Fab sx={fab.sx} aria-label={fab.label} color={fab.color} size="medium" onClick={goToTop}>
+              {fab.icon}
+            </Fab>
+          </Zoom>
+        ))}
+          <div className='youtube-wrap'>
+          <iframe src={`https://www.youtube.com/embed/${tape.url}`} title={ tape.subject }></iframe>
+          </div>
+          <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} />          
+      </div>
+      <BottomNav />  
+    </>
   )
 }
 
