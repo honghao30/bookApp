@@ -29,19 +29,20 @@ const BookSubList: React.FC = () => {
     
     useEffect(() => {
       const fetchBook = async () => {
-        const response = await axios.get(`/db/book${bookId}.json`);
-        const data = response.data;           
-        localStorage.setItem(`book${bookId}`, JSON.stringify(data));
-        const bookData = JSON.parse(localStorage.getItem(`book${bookId}`));
-        if(bookData) {   
-          setBook(bookData.book4);
-          console.log('상세2', bookData);
+        const response = await axios.get(`/db/${bookId}.json`);
+        const data = response.data;                  
+        localStorage.setItem(`${bookId}`, JSON.stringify(data));
+        const storedData = JSON.parse(localStorage.getItem(`${bookId}`));        
+        console.log('ddd', storedData)
+        if (storedData) {             
+          setBook(storedData.data);
+          console.log('상세2', storedData.data);
         }          
-        // const response = await axios.get(`https://tasty-tricolor-tango.glitch.me/bookList${bookId}`);
-        // setBook(response.data);
       };
       fetchBook();
     }, [bookId]);
+    
+    
 
     if (!book) {
       return <div>
@@ -61,9 +62,8 @@ const BookSubList: React.FC = () => {
               [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
-                {/* <Link to={{ pathname: `/ReadDetail/${book.bookLisId}`, state: { subject: book.subject, index: book.index } }}> */}
                 <Link to={`/ReadDetail/${book.Id}`}  state={{ cates: book.subject, index: index, bookId: bookId }}>
-                  {book.subject}
+                  {book.subject} 
                 </Link>
 
               </ListItem>
