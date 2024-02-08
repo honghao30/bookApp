@@ -1,9 +1,12 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import "firebase/compat/firestore";
-import firebase from "firebase/compat/app"
-import { getFirestore } from 'firebase/firestore/lite'
-import { getAuth } from 'firebase/auth';
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore"
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBlFYuaySEgg7-MeaFz_LMyEdrR03BY_3k",
   authDomain: "mycodelab-410304.firebaseapp.com",
@@ -11,13 +14,14 @@ const firebaseConfig = {
   projectId: "mycodelab-410304",
   storageBucket: "mycodelab-410304.appspot.com",
   messagingSenderId: "31662281107",
-  appId: "1:31662281107:web:d3631646c81ce7b3d81866",
-  measurementId: "G-7T51HLZ3P6"
+  appId: "1:31662281107:web:90c95ec68ac66573d81866",
+  measurementId: "G-L6VNGP5WM0"
 };
 
-const firestore = initializeApp(firebaseConfig)
-
-const db = getFirestore(firestore);
-
-export { firestore, db };
-export const authService = getAuth();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+// firestore 객체 생성
+const db = getFirestore(app);
+// firestore export
+export {db}

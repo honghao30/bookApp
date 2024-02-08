@@ -30,13 +30,14 @@ const BookSubList: React.FC = () => {
     useEffect(() => {
       const fetchBook = async () => {
         const response = await axios.get(`/db/${bookId}.json`);
-        const data = response.data;                  
+        const data = response.data;           
+        console.log(data)       
         localStorage.setItem(`${bookId}`, JSON.stringify(data));
         const storedData = JSON.parse(localStorage.getItem(`${bookId}`));        
         console.log('ddd', storedData)
         if (storedData) {             
           setBook(storedData.data);
-          console.log('상세2', storedData.data);
+          console.log('상세2', storedData);
         }          
       };
       fetchBook();

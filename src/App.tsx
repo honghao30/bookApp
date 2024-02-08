@@ -1,13 +1,12 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { RecoilRoot } from 'recoil'
-// import { authService } from "./firebase";
 
 import './assets/scss/index.scss'
 import CommonRouter  from './router/CommonRouter'
 import axios from 'axios'
 
-function App() {
+function App() { 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get('/db/list.json');

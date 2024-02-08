@@ -64,12 +64,12 @@ const ReadNoteDetail: React.FC = () => {
         {book.note1[index].subject}
       </SubTitle>
       <BookContent dangerouslySetInnerHTML={{ __html: book.note1[index].content }} />  
-      {/* <ButtonArea>
+      <ButtonArea>
         <Stack direction="row">
           <Button variant="outlined">성경구절 전체보기</Button>
         </Stack>
       </ButtonArea>     
-      <BookContent></BookContent>  */}
+      <BookContent></BookContent> 
     </div>
   )
 }

@@ -8,6 +8,10 @@ import OtherList from './TapeList';
 import AudioLists from './AudioList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
+import { db } from '../../src/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -48,11 +52,25 @@ const BookMain: React.FC = () => {
     const [tapeList, setTapeList] = useState([]);
     const [audioList, setAudioList] = useState([]);
 
+    const [test, setTest] = useState()
+    // async - await로 데이터 fetch 대기
+    async function getTest() {
+      // document에 대한 참조 생성
+      const docRef = doc(db, "posts", "1");
+      // 참조에 대한 Snapshot 쿼리
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        setTest(docSnap.data())
+      }
+    }
+
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
     };    
 
     useEffect(() => {
+      getTest()
       const listData = JSON.parse(localStorage.getItem('list'));
       if(listData) {
         setBookList(listData.book);
@@ -101,6 +119,8 @@ const BookMain: React.FC = () => {
             </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
+            {test !== undefined &&
+        <div>{test.content}</div>}
               <InsetList dataList={bookList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
