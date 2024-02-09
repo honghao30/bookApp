@@ -13,6 +13,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import BottomNav from "../layout/BottomNav"
 import TopUtilDetail from "../layout/TopUtilDetail"
+import { db } from '../../src/firebase';
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -51,7 +55,7 @@ const ReadTapeDetail: React.FC = () => {
   const [tape, setTape] = useState(null);
   const { typeId } = useParams();
   const location = useLocation();
-  const { cates, index } = location.state;
+  const { cates, index, bookId } = location.state;
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -65,20 +69,17 @@ const ReadTapeDetail: React.FC = () => {
     }
   ];
 
-  useEffect(() => {
-    const fetchBook = async () => {
-      const response = await axios.get(`/db/${typeId}.json`);
-      const data = response.data;   
-      console.log('1',data);     
-      localStorage.setItem(`tape${typeId}`, JSON.stringify(data));
-      const tapeData = JSON.parse(localStorage.getItem(`tape${typeId}`));
-      if(tapeData) {   
-        setTape(tapeData);
-        console.log(tapeData);
-      }
-      // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/tape`);
-    };
-    fetchBook();
+  async function getFireData() {    
+    const docRef = doc(db, "originVoice", bookId);  
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      setTape(docSnap.data())
+    }    
+  }
+
+  useEffect(() => {   
+    getFireData();
     window.addEventListener("scroll", () => {
         if (window.scrollY > 400) {
             setShowTopBtn(true);
@@ -118,10 +119,16 @@ const ReadTapeDetail: React.FC = () => {
             </Fab>
           </Zoom>
         ))}
+
           <div className='youtube-wrap'>
           <iframe src={`https://www.youtube.com/embed/${tape.url}`} title={ tape.subject }></iframe>
-          </div>
-          <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} />          
+          </div>      
+          <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} /> 
+          <ButtonArea>
+            <Stack direction="row">
+              <Button variant="outlined">수정하기</Button>
+            </Stack>
+          </ButtonArea>                     
       </div>
       <BottomNav />  
     </>

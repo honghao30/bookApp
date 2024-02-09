@@ -4,14 +4,13 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import InsetList from './List';
 import NoteList from './NoteList';
-import OtherList from './TapeList';
+import OriginVoice from './TapeList';
 import AudioLists from './AudioList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { db } from '../../src/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-
+import { collection, getDocs, doc } from "firebase/firestore";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -50,19 +49,23 @@ const BookMain: React.FC = () => {
     const [bookList, setBookList] = useState([]);
     const [noteList, setNoteList] = useState([]);   
     const [tapeList, setTapeList] = useState([]);
-    const [audioList, setAudioList] = useState([]);
-
-    const [test, setTest] = useState()
+    const [audioList, setAudioList] = useState([]);    
+    // const [test, setTest] = useState()
     // async - await로 데이터 fetch 대기
-    async function getTest() {
-      // document에 대한 참조 생성
-      const docRef = doc(db, "posts", "1");
-      // 참조에 대한 Snapshot 쿼리
-      const docSnap = await getDoc(docRef);
-  
-      if (docSnap.exists()) {
-        setTest(docSnap.data())
-      }
+    async function getFireData() {      
+      await getDocs(collection(db, "originVoice"))
+      .then((querySnapshot)=>{               
+          const newData = querySnapshot.docs
+          .map((doc) => ({...doc.data(), id:doc.id }));
+          setTapeList(newData);         
+      }) 
+      await getDocs(collection(db, "originNote"))
+      .then((querySnapshot)=>{               
+          const newData = querySnapshot.docs
+          .map((doc) => ({...doc.data(), id:doc.id }));
+          setNoteList(newData);         
+          console.log('노트', newData)
+      })       
     }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -70,15 +73,18 @@ const BookMain: React.FC = () => {
     };    
 
     useEffect(() => {
-      getTest()
+      getFireData()
       const listData = JSON.parse(localStorage.getItem('list'));
       if(listData) {
         setBookList(listData.book);
-        setNoteList(listData.note);
-        setTapeList(listData.tape);
+        // setNoteList(listData.note);
+        // setTapeList(listData.tape);
         setAudioList(listData.audioList);
-        console.log(listData.tape);
+        // console.log(listData.tape);
       }
+      if (tapeList != null) {
+        const tapeList = getFireData()
+      }      
       // api 호출 방식 변경
       // const fetchBook = async () => {
       //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/books');
@@ -119,15 +125,13 @@ const BookMain: React.FC = () => {
             </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-            {test !== undefined &&
-        <div>{test.content}</div>}
               <InsetList dataList={bookList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
               <NoteList noteList={noteList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              <OtherList tapeList={tapeList} />
+              <OriginVoice tapeList={tapeList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
               <AudioLists audioList={audioList} />

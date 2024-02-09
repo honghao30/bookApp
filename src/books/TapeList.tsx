@@ -18,8 +18,8 @@ const ListItem = styled.li `
         [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
 }, index: Key | null | undefined) => (
         <ListItem key={index}>
-          <Link to={`/ReadTapeDetail/${book.typeId}`} state={{ cates: book.subject, index: index }}>
-            {book.subject} 
+          <Link to={`/ReadTapeDetail/${book.id}`} state={{ cates: book.subject, index: index, bookId: book.id }}>
+            {book.subject} {book.id} 
           </Link>
         </ListItem>
       ))}            
