@@ -58,22 +58,24 @@ const BookMain: React.FC = () => {
           const newData = querySnapshot.docs
           .map((doc) => ({...doc.data(), id:doc.id }));
           setTapeList(newData);         
-      }) 
+      })     
+    }
+    async function getNoteData() {
       await getDocs(collection(db, "originNote"))
       .then((querySnapshot)=>{               
           const newData = querySnapshot.docs
           .map((doc) => ({...doc.data(), id:doc.id }));
           setNoteList(newData);         
           console.log('노트', newData)
-      })       
+      })         
     }
-
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
     };    
 
     useEffect(() => {
       getFireData()
+      getNoteData()
       const listData = JSON.parse(localStorage.getItem('list'));
       if(listData) {
         setBookList(listData.book);
@@ -84,6 +86,9 @@ const BookMain: React.FC = () => {
       }
       if (tapeList != null) {
         const tapeList = getFireData()
+      }
+      if (noteList != null) {
+        const noteList = getNoteData()
       }      
       // api 호출 방식 변경
       // const fetchBook = async () => {

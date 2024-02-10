@@ -87,7 +87,7 @@ const ReadTapeDetail: React.FC = () => {
             setShowTopBtn(false);
         }
     });    
-  }, [typeId]);
+  });
 
   const goToTop = () => {
       window.scrollTo({

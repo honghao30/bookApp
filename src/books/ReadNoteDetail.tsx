@@ -7,6 +7,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { db } from '../../src/firebase';
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -29,28 +31,24 @@ const ButtonArea = styled.div `
 `
 
 const ReadNoteDetail: React.FC = () => {  
-  const [book, setBook] = useState(null);
-  const { bookId } = useParams();
+  const [noteDetail, setNoteDetail] = useState(null);
+  const { id } = useParams();
   const location = useLocation();
-  const { cates, index } = location.state;
+  const { cates, noteId, index, noteDb } = location.state;
 
   useEffect(() => {
-    const fetchBook = async () => {   
-      const response = await axios.get(`/db/note${bookId}.json`);
-      const data = response.data;       
-      localStorage.setItem(`note${bookId}`, JSON.stringify(data));   
-      const noteData = JSON.parse(localStorage.getItem(`note${bookId}`));
-      if(noteData) {   
-        setBook(noteData);
-        console.log('로컬', noteData);
-      }         
-      // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/notecontent${noteSubId}`);      
-      // setBook(response.data);
+    const fetchNote = async () => {   
+      const docRef = doc(db, noteDb, noteId);  
+      const docSnap = await getDoc(docRef);
+    
+      if (docSnap.exists()) {
+        setNoteDetail(docSnap.data())
+      }       
     };
-    fetchBook();
-  }, [bookId]);
+    fetchNote();
+  });
 
-  if (!book) {
+  if (!noteDetail) {
     return <div>
           <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
             <CircularProgress />
@@ -61,9 +59,9 @@ const ReadNoteDetail: React.FC = () => {
   return (
     <div className='book-content'>
       <SubTitle>
-        {book.note1[index].subject}
-      </SubTitle>
-      <BookContent dangerouslySetInnerHTML={{ __html: book.note1[index].content }} />  
+        {cates}
+      </SubTitle>      
+      <BookContent dangerouslySetInnerHTML={{ __html: noteDetail.content }} /> 
       <ButtonArea>
         <Stack direction="row">
           <Button variant="outlined">성경구절 전체보기</Button>
