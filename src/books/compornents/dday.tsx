@@ -10,9 +10,9 @@ interface Event {
 const DDayCount: React.FC = () => {
   const [nextEvent, setNextEvent] = useState<Event | null>(null);
   const [daylist, setDaylist] = useState<Record<string, string>>({
-    'day1': '2024-02-01',
-    'day2': '2024-02-10',
-    'day3': '2024-02-11'
+    '총회': '2024-03-11',
+    '유월절': '2024-03-24',
+    '무교절': '2024-04-11'
   });
 
   useEffect(() => {

@@ -59,7 +59,7 @@ export default class DDayCounter {
       for (let i = 0; i < this.dates.length; i++) {
         const diffTime = this.dates[i].getTime() - today.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays <= 30) {
+        if (diffDays > 0 && diffDays <= 30) {
           return { date: this.dates[i], dDay: diffDays };
         }
       }

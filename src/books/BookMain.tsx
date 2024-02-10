@@ -8,9 +8,12 @@ import OriginVoice from './TapeList';
 import AudioLists from './AudioList';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../../src/firebase';
 
 import { db } from '../../src/firebase';
 import { collection, getDocs, doc } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -50,8 +53,10 @@ const BookMain: React.FC = () => {
     const [noteList, setNoteList] = useState([]);   
     const [tapeList, setTapeList] = useState([]);
     const [audioList, setAudioList] = useState([]);    
-    // const [test, setTest] = useState()
-    // async - await로 데이터 fetch 대기
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+    const navigate = useNavigate();
+
     async function getFireData() {      
       await getDocs(collection(db, "originVoice"))
       .then((querySnapshot)=>{               

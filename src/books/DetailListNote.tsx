@@ -40,24 +40,8 @@ const DetailListNote: React.FC = () => {
     }
 
     useEffect(() => {
-      // const fetchBook = async () => {
-      //   const response = await axios.get(`/db/${bookId}.json`);
-      //   const data = response.data;           
-      //   localStorage.setItem(`note${bookId}`, JSON.stringify(data));
-      //   const noteData = JSON.parse(localStorage.getItem(`note${bookId}`));
-      //   if(noteData) {   
-      //     setBook(noteData);
-      //     console.log(noteData);
-      //   }        
-      //   // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/note`);
-      //   // setBook(response.data);
-      //   // console.log(response.data)
-      // };
       getNoteList();
-      if (noteList != null) {
-        const noteList = getNoteList()
-      }         
-    });
+    },);
 
     if (!noteList) {
       return <div>
