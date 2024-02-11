@@ -9,9 +9,15 @@ import { useNavigate } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
+import { useEffect, useState } from 'react';
 
 const TopUtilDetail: React.FC<{ book: any }> = ({ book }) => {
-  const [auth, setAuth] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const navigate = useNavigate();
@@ -26,6 +32,23 @@ const TopUtilDetail: React.FC<{ book: any }> = ({ book }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    authService.onAuthStateChanged((user) => {
+      console.log(user);
+      if (user) {
+        // 로그인 된 상태일 경우
+        setIsLoggedIn(true);               
+        if (user.email === "ncpcog@gmail.com") {
+          setIsAdmin(true);
+        }
+      } else {
+        // 로그아웃 된 상태일 경우
+        setIsLoggedIn(false);
+      }
+    });
+  }, []);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -43,7 +66,7 @@ const TopUtilDetail: React.FC<{ book: any }> = ({ book }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {book}
           </Typography>
-          {auth && (
+          {isLoggedIn && (
             <div>
               <IconButton
                 size="large"

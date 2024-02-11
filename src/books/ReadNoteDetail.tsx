@@ -9,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { db } from '../../src/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -39,6 +41,8 @@ const ReadNoteDetail: React.FC = () => {
   const { id } = useParams();
   const location = useLocation();
   const { cates, noteId, index, noteDb } = location.state;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchNote = async () => {   
@@ -50,7 +54,21 @@ const ReadNoteDetail: React.FC = () => {
       }       
     };
     fetchNote();
-  });
+    authService.onAuthStateChanged((user) => {
+      console.log(user);
+      if (user) {
+        // 로그인 된 상태일 경우
+        setIsLoggedIn(true);               
+        if (user.email === "ncpcog@gmail.com") {
+          setIsAdmin(true);
+          console.log('admin');
+        }
+      } else {
+        // 로그아웃 된 상태일 경우
+        setIsLoggedIn(false);
+      }
+    });       
+  },[]);
 
   if (!noteDetail) {
     return <div>
@@ -67,8 +85,10 @@ const ReadNoteDetail: React.FC = () => {
       </SubTitle>      
       <BookContent dangerouslySetInnerHTML={{ __html: noteDetail.content }} /> 
       <ButtonArea>
-        <Stack direction="row">
-          <Button variant="outlined">등록하기</Button>          
+        <Stack direction="row">          
+            {isAdmin && <Button variant="outlined">성경구절 전체보기</Button>}
+            {isAdmin && <Button variant="outlined">성경구절 추가하기</Button>}               
+            {isAdmin && <Button variant="outlined">본문 수정하기</Button>}               
         </Stack>
       </ButtonArea>     
       <BookContent></BookContent> 

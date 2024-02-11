@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import { db } from '../../src/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { Button, Stack } from '@mui/material';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
 
 const List = styled.ul `
   display: block;
@@ -38,6 +40,8 @@ const DetailListNote: React.FC = () => {
     const { bookId } = useParams();
     const location = useLocation();
     const { cates, index, code } = location.state;
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     
     const getNoteList = async () => {    
       await getDocs(collection(db, code))
@@ -50,6 +54,20 @@ const DetailListNote: React.FC = () => {
     }
 
     useEffect(() => {
+      authService.onAuthStateChanged((user) => {
+        console.log(user);
+        if (user) {
+          // 로그인 된 상태일 경우
+          setIsLoggedIn(true);               
+          if (user.email === "ncpcog@gmail.com") {
+            setIsAdmin(true);
+            console.log('admin');
+          }
+        } else {
+          // 로그아웃 된 상태일 경우
+          setIsLoggedIn(false);
+        }
+      });      
       getNoteList();
     },[]);
 
@@ -77,9 +95,7 @@ const DetailListNote: React.FC = () => {
           </List>
           <ButtonArea>
             <Stack direction="row">
-              <Button variant="outlined">성경구절 전체보기</Button>
-              <Button variant="outlined">성경구절 추가하기</Button>
-              <Button variant="outlined">본문 수정하기</Button>
+            {isAdmin && <Button variant="outlined">등록하기</Button>}
             </Stack>
           </ButtonArea>            
       </div>
