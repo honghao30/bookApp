@@ -44,6 +44,10 @@ const ReadNoteDetail: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const modifyNote = (id, content) => {
+    alert(`ID: ${id}, Content: ${content}`);
+  }
+
   useEffect(() => {
     const fetchNote = async () => {   
       const docRef = doc(db, noteDb, noteId);  
@@ -88,7 +92,7 @@ const ReadNoteDetail: React.FC = () => {
         <Stack direction="row">          
             {isAdmin && <Button variant="outlined">성경구절 전체보기</Button>}
             {isAdmin && <Button variant="outlined">성경구절 추가하기</Button>}               
-            {isAdmin && <Button variant="outlined">본문 수정하기</Button>}               
+            {isAdmin && <Button variant="outlined" onClick={() => modifyNote(noteId, noteDetail.content)}>본문 수정하기</Button>}               
         </Stack>
       </ButtonArea>     
       <BookContent></BookContent> 

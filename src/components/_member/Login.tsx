@@ -64,7 +64,7 @@ const LoginForm: React.FC  = () => {
             </div>
             <DDayCount />
             <div className='sign-guide__wrap'>                
-                <Link to="/bookMain">Admin Login</Link>
+                <Link to="#">Admin Login</Link>
             </div>            
             <div className='admin-login__area'>
                 <form onSubmit={login}>
