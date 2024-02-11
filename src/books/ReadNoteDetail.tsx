@@ -28,6 +28,10 @@ const ButtonArea = styled.div `
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 5px;
+  .MuiStack-root {
+    gap: 5px;
+  }
 `
 
 const ReadNoteDetail: React.FC = () => {  
@@ -64,7 +68,7 @@ const ReadNoteDetail: React.FC = () => {
       <BookContent dangerouslySetInnerHTML={{ __html: noteDetail.content }} /> 
       <ButtonArea>
         <Stack direction="row">
-          <Button variant="outlined">성경구절 전체보기</Button>
+          <Button variant="outlined">등록하기</Button>          
         </Stack>
       </ButtonArea>     
       <BookContent></BookContent> 

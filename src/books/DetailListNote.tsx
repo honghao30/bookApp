@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { db } from '../../src/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { Button, Stack } from '@mui/material';
 
 const List = styled.ul `
   display: block;
@@ -22,14 +23,23 @@ const SubTitle = styled.p `
   padding: 15px 0;
   margin-bottom: 20px;
 `
-
+const ButtonArea = styled.div `
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  .MuiStack-root {
+    gap: 5px;
+  }
+`
 const DetailListNote: React.FC = () => {  
     const [noteList, setNoteList] = useState(null);
     const { bookId } = useParams();
     const location = useLocation();
     const { cates, index, code } = location.state;
     
-    async function getNoteList() {    
+    const getNoteList = async () => {    
       await getDocs(collection(db, code))
       .then((querySnapshot)=>{               
           const newData = querySnapshot.docs
@@ -41,7 +51,7 @@ const DetailListNote: React.FC = () => {
 
     useEffect(() => {
       getNoteList();
-    },);
+    },[]);
 
     if (!noteList) {
       return <div>
@@ -65,6 +75,13 @@ const DetailListNote: React.FC = () => {
               </ListItem>
             ))}            
           </List>
+          <ButtonArea>
+            <Stack direction="row">
+              <Button variant="outlined">성경구절 전체보기</Button>
+              <Button variant="outlined">성경구절 추가하기</Button>
+              <Button variant="outlined">본문 수정하기</Button>
+            </Stack>
+          </ButtonArea>            
       </div>
     )
 }
