@@ -6,6 +6,18 @@ import styled from "styled-components";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
 import Box from '@mui/material/Box';
 import { db } from '../../src/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
@@ -35,6 +47,14 @@ const ButtonArea = styled.div `
     gap: 5px;
   }
 `
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const ReadNoteDetail: React.FC = () => {  
   const [noteDetail, setNoteDetail] = useState(null);
@@ -43,11 +63,14 @@ const ReadNoteDetail: React.FC = () => {
   const { cates, noteId, index, noteDb } = location.state;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const modifyNote = (id, content) => {
-    alert(`ID: ${id}, Content: ${content}`);
+  const modifyNote = (id, content) => {    
+    setOpen(true);
   }
-
+  const handleClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     const fetchNote = async () => {   
       const docRef = doc(db, noteDb, noteId);  
@@ -96,6 +119,34 @@ const ReadNoteDetail: React.FC = () => {
         </Stack>
       </ButtonArea>     
       <BookContent></BookContent> 
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Sound
+            </Typography>
+            <Button autoFocus color="inherit" onClick={handleClose}>
+              save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <BookContent>
+          {noteId, noteDetail.content}    
+        </BookContent> 
+      </Dialog>      
     </div>
   )
 }
