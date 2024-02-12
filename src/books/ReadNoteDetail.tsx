@@ -7,20 +7,17 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import MyBtn from '../components/ui_elements/MyBtn';
 import { TransitionProps } from '@mui/material/transitions';
 import Box from '@mui/material/Box';
 import { db } from '../../src/firebase';
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../src/firebase';
 
@@ -36,6 +33,19 @@ const BookContent = styled.div `
   line-height:28px;
   margin-bottom: 10px;
   padding-bottom: 70px;
+`
+const TextAreaWrap = styled.div `
+  width: 100%;
+  max-width: 1280px;  
+  padding: 2px;
+  border: 1px solid #ddd;
+  margin: 20px auto;
+  textarea {
+    width: 100%;
+    height: 500px;
+    border: 0;
+    font-size: 16px;
+  }
 `
 const ButtonArea = styled.div `
   margin: 20px 0;
@@ -64,13 +74,35 @@ const ReadNoteDetail: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [openFull, setOpenFull] = React.useState(false);
+  const [newNoteDetail, setNewNoteDetail] = useState(noteDetail);
 
-  const modifyNote = (id, content) => {    
+  const addFullNote = (id, content) => {    
     setOpen(true);
   }
+
+  const editNote = (id, content) => {
+    setOpen(true);
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
+  const onChange = (e) => {
+    setNewNoteDetail(e.target.value);
+  };  
+  const updateNote = async (e) => {    
+    e.preventDefault();
+    const dbRef = doc(db, `${noteDb}`, id)
+    console.log('update', dbRef, noteDetail, newNoteDetail)
+    await updateDoc(dbRef, {
+      content: newNoteDetail
+    });    
+    setOpen(false);
+  };
+  const showFullBible = () => {
+    setOpenFull(prevOpenFull => !prevOpenFull);
+  }
   useEffect(() => {
     const fetchNote = async () => {   
       const docRef = doc(db, noteDb, noteId);  
@@ -113,12 +145,16 @@ const ReadNoteDetail: React.FC = () => {
       <BookContent dangerouslySetInnerHTML={{ __html: noteDetail.content }} /> 
       <ButtonArea>
         <Stack direction="row">          
-            {isAdmin && <Button variant="outlined">성경구절 전체보기</Button>}
-            {isAdmin && <Button variant="outlined">성경구절 추가하기</Button>}               
-            {isAdmin && <Button variant="outlined" onClick={() => modifyNote(noteId, noteDetail.content)}>본문 수정하기</Button>}               
+            {isAdmin && <Button variant="outlined" onClick={ showFullBible }>성경구절 전체보기</Button>}
+            {isAdmin && <Button variant="outlined" onClick={() => addFullNote(noteId, noteDetail.content)}>성경구절 추가하기</Button>}               
+            {isAdmin && <Button variant="outlined" onClick={() => editNote(noteId, noteDetail.content)}>본문 수정하기</Button>}               
         </Stack>
       </ButtonArea>     
-      <BookContent></BookContent> 
+      {openFull && 
+      <BookContent>
+        성경전체
+      </BookContent>
+      }
       <Dialog
         fullScreen
         open={open}
@@ -136,15 +172,38 @@ const ReadNoteDetail: React.FC = () => {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Sound
+              수정
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
+            {/* <Button autoFocus color="inherit" onClick={handleClose}>
+              저장
+            </Button> */}
           </Toolbar>
         </AppBar>
         <BookContent>
-          {noteId, noteDetail.content}    
+          {/* {noteId, noteDetail.content}     */}
+          <TextAreaWrap>
+            <form onSubmit={ updateNote }>              
+              <textarea
+                value={ newNoteDetail }
+                onChange={onChange}
+              ></textarea>
+              <ButtonArea>
+                <MyBtn
+                  type="submit"                      
+                  iconOnly={false}
+                  btnColor={'btn-primary'}
+                  btnSize={'medium'}                  
+                >수정</MyBtn> 
+                <MyBtn
+                  type="button"                      
+                  iconOnly={false}
+                  btnColor={'btn-secondary'}
+                  btnSize={'medium'}
+                  onClick={handleClose}
+                >취소</MyBtn>                 
+              </ButtonArea>              
+            </form>
+          </TextAreaWrap>
         </BookContent> 
       </Dialog>      
     </div>
