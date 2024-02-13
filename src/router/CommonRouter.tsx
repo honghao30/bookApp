@@ -38,7 +38,7 @@ function CommonRouter() {
           <Route path="/DetailList/:bookId" element={<BookSubList />} />                      
         </Route> 
         <Route element={<BookLayout />}>          
-          <Route path="/ReadDetail/:Id" element={<ReadDetail />} />                      
+          <Route path="/ReadDetail/:id" element={<ReadDetail />} />                      
         </Route>   
         <Route element={<BookLayout />}>          
           <Route path="/DetailListNote/:noteCode" element={<DetailListNote />} />                      

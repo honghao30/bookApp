@@ -56,7 +56,8 @@ const ReadDetail: React.FC = () => {
   const location = useLocation();
   const { bookId, cates, index } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
-
+  const { id } = useParams();
+  
   const fabs = [
     {
       color: 'primary' as 'primary',
@@ -67,19 +68,19 @@ const ReadDetail: React.FC = () => {
   ];
 
   useEffect(() => {
-    const fetchBook = async () => {
-      const response = await axios.get(`/db/book${bookId}.json`);
-      const data = response.data;       
-      localStorage.setItem(`book${bookId}`, JSON.stringify(data));   
-      const booksData = JSON.parse(localStorage.getItem(`book${bookId}`));
-      if(booksData) {   
-        setBook(booksData[`book${bookId}`]);
-      }
-      // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/bookcontent${bookLisId}`);
-      // console.log(response.data);
-      // setBook(response.data);
-    };
-    fetchBook();
+    // const fetchBook = async () => {
+    //   const response = await axios.get(`/db/book${bookId}.json`);
+    //   const data = response.data;       
+    //   localStorage.setItem(`book${bookId}`, JSON.stringify(data));   
+    //   const booksData = JSON.parse(localStorage.getItem(`book${bookId}`));
+    //   if(booksData) {   
+    //     setBook(booksData[`book${bookId}`]);
+    //   }
+    //   // const response = await axios.get(`https://nosy-billowy-bun.glitch.me/bookcontent${bookLisId}`);
+    //   // console.log(response.data);
+    //   // setBook(response.data);
+    // };
+    // fetchBook();
     window.addEventListener("scroll", () => {
       if (window.scrollY > 400) {
           setShowTopBtn(true);
@@ -87,7 +88,7 @@ const ReadDetail: React.FC = () => {
           setShowTopBtn(false);
       }
   });     
-  }, [bookId]);
+  }, []);
 
   const goToTop = () => {
       window.scrollTo({

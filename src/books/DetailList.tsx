@@ -5,6 +5,11 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { db } from '../../src/firebase';
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { Button, Stack } from '@mui/material';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
 
 const List = styled.ul `
   display: block;
@@ -27,21 +32,19 @@ const BookSubList: React.FC = () => {
     const location = useLocation();
     const cates = location.state.cates;
     
+    const getBookList = async () => {    
+      await getDocs(collection(db, bookId))
+      .then((querySnapshot)=>{               
+          const newData = querySnapshot.docs
+          .map((doc) => ({...doc.data(), id:doc.id }));
+          setBook(newData);         
+          console.log('노트', newData)
+      })     
+    }
+
     useEffect(() => {
-      const fetchBook = async () => {
-        const response = await axios.get(`/db/${bookId}.json`);
-        const data = response.data;           
-        console.log(data)       
-        localStorage.setItem(`${bookId}`, JSON.stringify(data));
-        const storedData = JSON.parse(localStorage.getItem(`${bookId}`));        
-        console.log('ddd', storedData)
-        if (storedData) {             
-          setBook(storedData.data);
-          console.log('상세2', storedData);
-        }          
-      };
-      fetchBook();
-    }, [bookId]);
+      getBookList()      
+    }, []);
     
     
 
@@ -63,10 +66,9 @@ const BookSubList: React.FC = () => {
               [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
-                <Link to={`/ReadDetail/${book.Id}`}  state={{ cates: book.subject, index: index, bookId: bookId }}>
-                  {book.subject} 
+                <Link to={`/ReadDetail/${book.id}`}  state={{ cates: book.subject, index: index, bookId: book.Id }}>
+                  {book.subject} {book.id}
                 </Link>
-
               </ListItem>
             ))}            
           </List>
