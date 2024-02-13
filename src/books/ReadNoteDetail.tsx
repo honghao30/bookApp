@@ -79,6 +79,7 @@ const ReadNoteDetail: React.FC = () => {
   const [openFull, setOpenFull] = React.useState(false);  
   const quillRef = useRef()
   const [content, setContent] = useState("")
+  const [showForm, setShowForm] = useState(false);
 
   const modules = useMemo(() => {
     return {
@@ -163,14 +164,33 @@ const ReadNoteDetail: React.FC = () => {
       <BookContent dangerouslySetInnerHTML={{ __html: noteDetail.content }} /> 
       <ButtonArea>
         <Stack direction="row">          
-            {isAdmin && <Button variant="outlined" onClick={ showFullBible }>성경구절 전체보기</Button>}
-            {isAdmin && <Button variant="outlined" onClick={() => addFullNote(noteId, noteDetail.content)}>성경구절 추가하기</Button>}               
+            {isAdmin && <Button variant="outlined" onClick={() => { showFullBible(); setShowForm(false); }}>성경구절 전체보기</Button>}
+            {isAdmin && <Button variant="outlined" onClick={() => { showFullBible(); setShowForm(true); }}>성경구절 추가하기</Button>}  
             {isAdmin && <Button variant="outlined" onClick={() => editNote(noteId, noteDetail.content)}>본문 수정하기</Button>}               
         </Stack>
       </ButtonArea>     
       {openFull && 
       <BookContent>
-        성경전체
+        <div dangerouslySetInnerHTML={{ __html: noteDetail.fullBible }} />
+        {showForm && 
+        <form>
+          <ReactQuill
+              style={{ width: "100%", height: "550px" }}
+              placeholder=""
+              theme="snow"
+              ref={quillRef}
+              value={noteDetail.fullBible}
+              onChange={(fullBible) => setNoteDetail({ ...noteDetail, fullBible })}
+              modules={modules}
+            />      
+          <ButtonArea>
+            <Stack direction="row">          
+                {isAdmin && <Button variant="outlined">저장</Button>}
+                {isAdmin && <Button variant="outlined">취소</Button>}                                
+            </Stack>
+          </ButtonArea> 
+        </form>    
+        }               
       </BookContent>
       }
       <Dialog
