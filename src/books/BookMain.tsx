@@ -57,6 +57,21 @@ const BookMain: React.FC = () => {
     
     const navigate = useNavigate();
 
+    async function getBookList() {      
+      await getDocs(collection(db, "trueBookList"))
+      .then((querySnapshot)=>{               
+        const newData = querySnapshot.docs
+        .map((doc) => ({...doc.data(), id:doc.id }));
+
+        // audio가 true인 항목만 선택
+        const audioData = newData.filter(item => item.audio === true);
+
+        setBookList(newData);         
+        setAudioList(audioData);  // audioList 상태 설정
+        console.log('d')
+      })     
+    }
+
     async function getFireData() {      
       await getDocs(collection(db, "originVoice"))
       .then((querySnapshot)=>{               
@@ -79,48 +94,15 @@ const BookMain: React.FC = () => {
     };    
 
     useEffect(() => {
+      getBookList()
       getFireData()
       getNoteData()
-      const listData = JSON.parse(localStorage.getItem('list'));
-      if(listData) {
-        setBookList(listData.book);
-        // setNoteList(listData.note);
-        // setTapeList(listData.tape);
-        setAudioList(listData.audioList);
-        // console.log(listData.tape);
-      }
       if (tapeList != null) {
         const tapeList = getFireData()
       }
       if (noteList != null) {
         const noteList = getNoteData()
       }      
-      // api 호출 방식 변경
-      // const fetchBook = async () => {
-      //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/books');
-      //   return response.data;
-      // };
-  
-      // const fetchNote = async () => {
-      //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/note');
-      //   return response.data;
-      // };
-      // const fetchTate = async () => {
-      //   const response = await axios.get('https://tasty-tricolor-tango.glitch.me/type');
-      //   return response.data;
-      // };
-      // const fetchAudio = async () => {
-      //   const response = await axios.get('https://nosy-billowy-bun.glitch.me/audioList');
-      //   return response.data;
-      // };      
-      // Promise.all([fetchBook(), fetchNote(), fetchTate(), fetchAudio()])
-      //   .then(([bookData, noteData, tapeData, audioData]) => {
-      //     setBookList(bookData);
-      //     setNoteList(noteData);
-      //     setTapeList(tapeData);
-      //     setAudioList(audioData);
-      //   })
-      //   .catch(error => console.error('Error fetching data: ', error));
     }, []);
 
     return (

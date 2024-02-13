@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import axios from 'axios';
 import { useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
@@ -13,10 +13,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import BottomNav from "../layout/BottomNav"
 import TopUtilDetail from "../layout/TopUtilDetail"
-import { db } from '../../src/firebase';
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { db } from '../../src/firebase';
+import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
+import "react-quill/dist/quill.snow.css"
+import ReactQuill from "react-quill"
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -58,7 +62,26 @@ const ReadTapeDetail: React.FC = () => {
   const { cates, index, bookId } = location.state;
   const [value, setValue] = useState(0);
   const theme = useTheme();
+  const [editing, setEditing] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const quillRef = useRef()
+  
+  const modules = useMemo(() => {
+    return {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          ["blockquote"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }, "link", "image"],
+        ],
+      },
+    }
+  }, [])
 
   const fabs = [
     {
@@ -77,6 +100,16 @@ const ReadTapeDetail: React.FC = () => {
       setTape(docSnap.data())
     }    
   }
+  const toggleEditing = () => {
+    setEditing((prev) => !prev);
+  };
+
+  const isModifyTape = (e) => {
+    e.preventDefault();
+    const dbRef = doc(db, "originVoice", bookId);
+    console.log('update', dbRef, bookId)    
+    setEditing(false);
+  }
 
   useEffect(() => {   
     getFireData();
@@ -86,8 +119,22 @@ const ReadTapeDetail: React.FC = () => {
         } else {
             setShowTopBtn(false);
         }
-    });    
-  });
+    });  
+    authService.onAuthStateChanged((user) => {
+      console.log(user);
+      if (user) {
+        // 로그인 된 상태일 경우
+        setIsLoggedIn(true);               
+        if (user.email === "ncpcog@gmail.com") {
+          setIsAdmin(true);
+          console.log('admin');
+        }
+      } else {
+        // 로그아웃 된 상태일 경우
+        setIsLoggedIn(false);
+      }
+    });       
+  }, []);
 
   const goToTop = () => {
       window.scrollTo({
@@ -119,16 +166,37 @@ const ReadTapeDetail: React.FC = () => {
             </Fab>
           </Zoom>
         ))}
-
-          <div className='youtube-wrap'>
-          <iframe src={`https://www.youtube.com/embed/${tape.url}`} title={ tape.subject }></iframe>
-          </div>      
-          <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} /> 
-          <ButtonArea>
-            <Stack direction="row">
-              <Button variant="outlined">수정하기</Button>
-            </Stack>
-          </ButtonArea>                     
+        {editing ? (
+          <form onSubmit={ isModifyTape }>
+            <ReactQuill
+                style={{ width: "100%", height: "550px" }}
+                placeholder=""
+                theme="snow"
+                ref={quillRef}
+                value={tape.content}
+                onChange={(content) => setTape({ ...tape, content })}
+                modules={modules}
+              />      
+            <ButtonArea>
+              <Stack direction="row">          
+                  {isAdmin && <Button variant="outlined" type="submit">저장</Button>}
+                  {isAdmin && <Button variant="outlined" onClick={toggleEditing}>취소</Button>}                                
+              </Stack>
+            </ButtonArea> 
+          </form>  
+          ) : ( 
+          <>
+            <div className='youtube-wrap'>
+            <iframe src={`https://www.youtube.com/embed/${tape.url}`} title={ tape.subject }></iframe>
+            </div>
+            <BookContent dangerouslySetInnerHTML={{ __html: tape.content }} /> 
+            <ButtonArea>
+              <Stack direction="row">
+                <Button variant="outlined" onClick={toggleEditing}>수정하기</Button>
+              </Stack>
+            </ButtonArea> 
+          </> 
+        )}                   
       </div>
       <BottomNav />  
     </>
