@@ -41,6 +41,13 @@ const ButtonArea = styled.div `
   justify-content: center;
   align-items: center;
 `
+const YoutubeLink = styled.div `
+  margin: 10px 0;
+  width: 50%;
+  height: 45px;
+  border: 1px solid #ddd;
+`
+
 const fabStyle = {
   position: 'fixed',
   bottom: 56,
@@ -62,6 +69,7 @@ const ReadTapeDetail: React.FC = () => {
   const { cates, index, bookId } = location.state;
   const [value, setValue] = useState(0);
   const theme = useTheme();
+  const [youtube, setYoutube] = useState();
   const [editing, setEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -168,6 +176,7 @@ const ReadTapeDetail: React.FC = () => {
         ))}
         {editing ? (
           <form onSubmit={ isModifyTape }>
+            <p><input name="youtube" type="text" placeholder="Youtube Link" required value={youtube} /></p>
             <ReactQuill
                 style={{ width: "100%", height: "550px" }}
                 placeholder=""
