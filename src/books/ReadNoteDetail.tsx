@@ -88,15 +88,15 @@ const ReadNoteDetail: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const onChange = (e) => {
-    setNewNoteDetail(e.target.value);
-  };  
+  // const onChange = (e) => {
+  //   setNewNoteDetail(e.target.value);
+  // };  
   const updateNote = async (e) => {    
     e.preventDefault();
     const dbRef = doc(db, `${noteDb}`, id)
     console.log('update', dbRef, noteDetail, newNoteDetail)
     await updateDoc(dbRef, {
-      content: newNoteDetail
+      content: noteDetail.content
     });    
     setOpen(false);
   };
@@ -184,8 +184,8 @@ const ReadNoteDetail: React.FC = () => {
           <TextAreaWrap>
             <form onSubmit={ updateNote }>              
               <textarea
-                value={ newNoteDetail }
-                onChange={onChange}
+                value={ noteDetail.content }
+                onChange={(e) => setNoteDetail({ ...noteDetail, content: e.target.value })}
               ></textarea>
               <ButtonArea>
                 <MyBtn
