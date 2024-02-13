@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import axios from 'axios';
 import { useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
@@ -20,6 +20,8 @@ import { db } from '../../src/firebase';
 import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../src/firebase';
+import "react-quill/dist/quill.snow.css"
+import ReactQuill from "react-quill"
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -74,8 +76,24 @@ const ReadNoteDetail: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [openFull, setOpenFull] = React.useState(false);
-  const [newNoteDetail, setNewNoteDetail] = useState(noteDetail);
+  const [openFull, setOpenFull] = React.useState(false);  
+  const quillRef = useRef()
+  const [content, setContent] = useState("")
+
+  const modules = useMemo(() => {
+    return {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          ["blockquote"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }, "link", "image"],
+        ],
+      },
+    }
+  }, [])
 
   const addFullNote = (id, content) => {    
     setOpen(true);
@@ -94,7 +112,7 @@ const ReadNoteDetail: React.FC = () => {
   const updateNote = async (e) => {    
     e.preventDefault();
     const dbRef = doc(db, `${noteDb}`, id)
-    console.log('update', dbRef, noteDetail, newNoteDetail)
+    console.log('update', dbRef, noteDetail)
     await updateDoc(dbRef, {
       content: noteDetail.content
     });    
@@ -183,10 +201,19 @@ const ReadNoteDetail: React.FC = () => {
           {/* {noteId, noteDetail.content}     */}
           <TextAreaWrap>
             <form onSubmit={ updateNote }>              
-              <textarea
+              {/* <textarea
                 value={ noteDetail.content }
                 onChange={(e) => setNoteDetail({ ...noteDetail, content: e.target.value })}
-              ></textarea>
+              ></textarea> */}
+              <ReactQuill
+                style={{ width: "100%", height: "550px" }}
+                placeholder=""
+                theme="snow"
+                ref={quillRef}
+                value={noteDetail.content}
+                onChange={(content) => setNoteDetail({ ...noteDetail, content })}
+                modules={modules}
+              />              
               <ButtonArea>
                 <MyBtn
                   type="submit"                      
