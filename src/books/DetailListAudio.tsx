@@ -4,6 +4,11 @@ import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
+import { db } from '../../src/firebase';
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { Button, Stack } from '@mui/material';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
 
 const List = styled.ul `
   display: block;
@@ -22,18 +27,23 @@ const SubTitle = styled.p `
 
 const DetailListAudio: React.FC = () => {  
     const [audioBook, setAudioBook] = useState(null);
-    const { audioId } = useParams();
+    const { bookId } = useParams();
     const location = useLocation();
-    const { cates, index } = location.state;
-    
+    const { cates, index } = location.state;   
+
+    const getBookList = async () => {    
+      await getDocs(collection(db, bookId))
+      .then((querySnapshot)=>{               
+          const newData = querySnapshot.docs
+          .map((doc) => ({...doc.data(), id:doc.id }));
+          setAudioBook(newData);         
+          console.log('노트', newData)
+      })     
+    }
+
     useEffect(() => {
-      const fetchBook = async () => {
-        const response = await axios.get(`https://nosy-billowy-bun.glitch.me/audioCont${audioId}`);
-        setAudioBook(response.data);
-        console.log(response.data)
-      };
-      fetchBook();
-    }, [audioId]);
+      getBookList();
+    }, []);
 
     if (!audioBook) {
       return <div>
@@ -55,7 +65,7 @@ const DetailListAudio: React.FC = () => {
                     src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
                     title="오디오 플레이어" 
                     width="100%" 
-                    height="160px">
+                    height="100px">
                 </iframe>                    
                   </div>          
               </ListItem>
