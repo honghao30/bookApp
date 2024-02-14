@@ -21,7 +21,7 @@ const LoginForm: React.FC  = () => {
     }
 
     const onChange = (event: { target: { name: any; value: any; }; }) => {
-    const {target: {name, value}} = event;
+        const {target: {name, value}} = event;
         if (name==='email') {            
             setEmail(value)
             console.log(email)
