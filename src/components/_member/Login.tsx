@@ -13,11 +13,16 @@ const LoginForm: React.FC  = () => {
     const [newAccount, setNewAccount] = useState(true);
     const [error, setError] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [open, setOpen] = useState(false)
 
     const navigate = useNavigate();
 
     const loginMsg = () => {
         alert('현재는 외부인 로그인을 허용하지 않습니다.')
+    }
+
+    const adminLogin = () => {
+        setOpen(prevOpen => !prevOpen);
     }
 
     const onChange = (event: { target: { name: any; value: any; }; }) => {
@@ -63,9 +68,16 @@ const LoginForm: React.FC  = () => {
                 </Stack>                             
             </div>
             <DDayCount />
-            <div className='sign-guide__wrap'>                
-                <Link to="#">Admin Login</Link>
+            <div className='sign-guide__wrap'>   
+                <MyBtn
+                    type="button"                      
+                    iconOnly={false}
+                    btnColor={'btn-default-text'}
+                    btnSize={'small'}
+                    onClick={ adminLogin }
+                >Admin Login</MyBtn>                
             </div>            
+            {open &&
             <div className='admin-login__area'>
                 <form onSubmit={login}>
                     <div className='login__inner'>
@@ -81,6 +93,7 @@ const LoginForm: React.FC  = () => {
                     >로그인</MyBtn>                    
                 </form>            
             </div>
+            }
         </div>
     )
 }
