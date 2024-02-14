@@ -13,6 +13,11 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Loading from './compornents/Loading';
 import BottomNav from "../layout/BottomNav"
 import TopUtilDetail from "../layout/TopUtilDetail"
+import { db } from '../../src/firebase';
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { Button, Stack } from '@mui/material';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
 
 const List = styled.ul `
   display: block;
@@ -57,7 +62,7 @@ const ReadDetail: React.FC = () => {
   const { bookId, cates, index } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
   const { id } = useParams();
-  
+
   const fabs = [
     {
       color: 'primary' as 'primary',
@@ -67,7 +72,16 @@ const ReadDetail: React.FC = () => {
     }
   ];
 
+  const getBookDetail = async () => {       
+    const docRef = doc(db, bookId, id);  
+    const docSnap = await getDoc(docRef);    
+    if (docSnap.exists()) {
+      setBook(docSnap.data())
+    }      
+  }
+
   useEffect(() => {
+    getBookDetail();
     // const fetchBook = async () => {
     //   const response = await axios.get(`/db/book${bookId}.json`);
     //   const data = response.data;       
@@ -121,9 +135,9 @@ const ReadDetail: React.FC = () => {
         ))}     
 
         <AudioSection>
-        <iframe src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book[index].url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} title="오디오 플레이어" width="100%" height="60px"></iframe>
+        <iframe src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} title="오디오 플레이어" width="100%" height="60px"></iframe>
         </AudioSection>
-       <BookContent dangerouslySetInnerHTML={{ __html: book[index].content }} />  
+       <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />  
       </div>
       <BottomNav />  
     </> 
