@@ -4,7 +4,7 @@ import { isLogin } from '../utils/common';
 
 // 레이아웃
 import Intro from '../pages/Intro'
-import Form from '../pages/Form'
+// import Form from '../pages/Form'
 import OnlyBodyLy from '../layout/onlyBodyLy';
 import BookLayout from '../layout/BookLayout';
 import BookMainLayout from '../layout/BookMainLayout';
@@ -28,9 +28,9 @@ function CommonRouter() {
         <Route element={<OnlyBodyLy />}>      
           <Route path="/Intro" element={isLogin() ? <Navigate to="/BookMain" /> : <Intro />} />
         </Route>                         
-        <Route element={<BookLayout />}>          
+        {/* <Route element={<BookLayout />}>          
           <Route path="/Form" element={<Form />}></Route>             
-        </Route>   
+        </Route>    */}
         <Route element={<BookMainLayout />}>          
           <Route path="/BookMain" element={<BookMain />}></Route>             
         </Route>   
