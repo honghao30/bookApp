@@ -6,9 +6,9 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import { useRecoilState } from 'recoil';
-import { loginFormState, setLoggedInState } from '../../recoil/authAtom';
+import { login, isLoggedInState, signOut } from '../../recoil/authAtom';
 
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword} from 'firebase/auth';
 import { authService } from '../../../src/firebase';
 
 const LoginForm: React.FC  = () => {  
@@ -18,7 +18,6 @@ const LoginForm: React.FC  = () => {
     const [error, setError] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [open, setOpen] = useState(false)
-    const [formData, setFormData] = useRecoilState(loginFormState);
 
     const navigate = useNavigate();
 
@@ -30,32 +29,46 @@ const LoginForm: React.FC  = () => {
         setOpen(prevOpen => !prevOpen);
     }
 
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };  
-    const login = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();                  
-        try {
-          await signInWithEmailAndPassword(authService, formData.email, formData.password);
-          setLoggedInState(true); 
-          navigate('/BookMain');
-        } catch (e) {
-          setError(e.message.replace("Firebase: Error ", ""));
+    const onChange = (event: { target: { name: any; value: any; }; }) => {
+        const {target: {name, value}} = event;
+        if (name==='email') {            
+            setEmail(value)            
+        } else if (name=== "password") {
+            setPassword(value);            
         }
+    } 
+
+    const Handlelogin = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();     
+        const formData = {
+           email: email,
+           password: password,
+        };    
+        try {          
+            const loggedInUser = await login(formData);
+            // setUser(loggedInUser);
+            // setIsLoggedIn(true);                    
+            // navigate("/Main")  
+            } catch (error) {
+            console.error(error); // 이 부분은 에러처리를 원하는 방식으로 변경하실 수 있습니다.
+        }                 
+        // try {
+        //   await signInWithEmailAndPassword(authService, formData.email, formData.password);
+        //   setLoggedInState(true); 
+        //   navigate('/BookMain');
+        // } catch (e) {
+        //   setError(e.message.replace("Firebase: Error ", ""));
+        // }
     }
 
-    useEffect(() => {
-        authService.onAuthStateChanged((user) => {
-            console.log(user);
-            if (user) {
-                navigate('/BookMain');
-            }
-        });
-      }, []);
+    // useEffect(() => {
+    //     authService.onAuthStateChanged((user) => {
+    //         console.log(user);
+    //         if (user) {
+    //             navigate('/BookMain');
+    //         }
+    //     });
+    //   }, []);
 
     return (
         <div className="login__form">
@@ -77,7 +90,7 @@ const LoginForm: React.FC  = () => {
             </div>            
             {open &&
             <div className='admin-login__area'>
-                <form onSubmit={login}>
+                <form onSubmit={Handlelogin}>
                     <div className='login__inner'>
                         <p><input name="email" type="email" placeholder="Email" required value={email} onChange={onChange} /></p>
                         <p><input name="password" type="password" placeholder="password" required value={password} onChange={onChange} /></p>
