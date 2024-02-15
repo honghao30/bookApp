@@ -1,11 +1,12 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import TopUtilMain from "./TopUtilMain"
 import BottomNav from "./BottomNav"
 
 const BookMainLayout = () => {
+    const location = useLocation();
     return (
         <>
-            <TopUtilMain />
+            <TopUtilMain  path={location.pathname} />
             <Outlet/>
             <BottomNav />                  
         </>

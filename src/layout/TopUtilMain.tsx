@@ -14,10 +14,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 // ui part
 
-const TopUtilMain: React.FC = () => {  
+const TopUtilMain: React.FC = ({ path }) => {  
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(isLoggedInState);
-
   const handleMenuClick = () => {
 
   };
@@ -29,7 +28,7 @@ const TopUtilMain: React.FC = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-            {location.pathname !== '/BookMain' &&
+            {path !== '/BookMain' &&
             <IconButton
               size="large"
               edge="start"
@@ -41,7 +40,7 @@ const TopUtilMain: React.FC = () => {
               <MenuIcon />
             </IconButton>
             }
-            {location.pathname !== '/BookMain' &&
+            {path !== '/BookMain' &&
             <IconButton
               size="large"
               edge="start"
@@ -54,7 +53,7 @@ const TopUtilMain: React.FC = () => {
             </IconButton>          
             }  
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            진리책자 도서관
+            진리책자 도서관//{path}
           </Typography>
           <MyMenuList />
         </Toolbar>
