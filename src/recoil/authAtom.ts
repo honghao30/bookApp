@@ -1,21 +1,18 @@
-import { atom, useRecoilState, useRecoilCallback } from "recoil";
-import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { authService } from '../../src/firebase';
-interface User {
-    email: string;
-    // name: string;    
-    token?: string;
-}
+import { atom } from 'recoil';
 
-export const userState = atom<User>({
-    key: "user",
-    default: { email: "" },
-})
-  
-//Logout 하는 함수
-export async function logout() {
-   await signOut(authService);
-   return;
-}
+export const loginFormState = atom({
+  key: 'loginFormState',
+  default: {
+    email: '',
+    password: '',
+  },
+});
+
+export const isLoggedInState = atom({
+  key: 'isLoggedInState',
+  default: false, // 기본값은 로그인되지 않은 상태
+});
+
+export const setLoggedInState = (isLoggedIn: boolean) => {
+  isLoggedInState.set(isLoggedIn);
+};

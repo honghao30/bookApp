@@ -1,9 +1,13 @@
-import React, { ChangeEvent, MouseEvent, FormEvent, useState, useEffect } from 'react'
+import React, { FormEvent, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import DDayCount from '../../books/compornents/dday'
 import MyBtn from '../ui_elements/MyBtn';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+
+import { useRecoilState } from 'recoil';
+import { loginFormState, setLoggedInState } from '../../recoil/authAtom';
+
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../../src/firebase';
 
@@ -14,6 +18,7 @@ const LoginForm: React.FC  = () => {
     const [error, setError] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [open, setOpen] = useState(false)
+    const [formData, setFormData] = useRecoilState(loginFormState);
 
     const navigate = useNavigate();
 
@@ -25,37 +30,30 @@ const LoginForm: React.FC  = () => {
         setOpen(prevOpen => !prevOpen);
     }
 
-    const onChange = (event: { target: { name: any; value: any; }; }) => {
-        const {target: {name, value}} = event;
-        if (name==='email') {            
-            setEmail(value)
-            console.log(email)
-        } else if (name=== "password") {
-            setPassword(value);
-            console.log(password)
-        }
-    }    
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    };  
     const login = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();          
+        e.preventDefault();                  
         try {
-            await signInWithEmailAndPassword(authService, email, password);  
-            navigate('/BookMain');          
+          await signInWithEmailAndPassword(authService, formData.email, formData.password);
+          setLoggedInState(true); 
+          navigate('/BookMain');
         } catch (e) {
-            return e.message.replace("Firebase: Error ", "");
+          setError(e.message.replace("Firebase: Error ", ""));
         }
     }
 
     useEffect(() => {
         authService.onAuthStateChanged((user) => {
-          console.log(user);
-          if (user) {
-            // 로그인 된 상태일 경우
-            setIsLoggedIn(true);
-            navigate('/BookMain');
-          } else {
-            // 로그아웃 된 상태일 경우
-            setIsLoggedIn(false);
-          }
+            console.log(user);
+            if (user) {
+                navigate('/BookMain');
+            }
         });
       }, []);
 
