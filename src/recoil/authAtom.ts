@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, useSetRecoilState } from 'recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   createUserWithEmailAndPassword,
@@ -33,10 +33,18 @@ export const login = async (formData: { email: string; password: string; }) => {
     authService.onAuthStateChanged((user: any) => {        
         if (user) {
           console.log('성공', user);
+          // console.log('성공', user);
+          // Recoil 상태 업데이트
+          const setUser = useSetRecoilState(userState);
+          const setIsLoggedIn = useSetRecoilState(isLoggedInState);
+          setUser({ email: user.email, token: user.refreshToken });
+          setIsLoggedIn(true);
         }
     });    
   } catch (error) {
     console.log('Error')
+    const setErrorMessage = useSetRecoilState(errorMessageState);
+    setErrorMessage(error.message);
   }    
 
   // if (user) {      
