@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import InsetList from './List';
 import NoteList from './NoteList';
 import OriginVoice from './TapeList';
@@ -13,9 +12,7 @@ import Box from '@mui/material/Box';
 
 // fire base
 import { db } from '../../src/firebase';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { authService } from '../../../src/firebase';
-import { collection, getDocs, doc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,56 +53,29 @@ const BookMain: React.FC = () => {
     const [noteList, setNoteList] = useState([]);   
     const [tapeList, setTapeList] = useState([]);
     const [audioList, setAudioList] = useState([]);    
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    
-    const navigate = useNavigate();
 
     async function getBookList() {      
-      await getDocs(collection(db, "trueBookList"))
-      .then((querySnapshot)=>{               
-        const newData = querySnapshot.docs
-        .map((doc) => ({...doc.data(), id:doc.id }));
-
-        // audio가 true인 항목만 선택
-        const audioData = newData.filter(item => item.audio === true);
-
-        setBookList(newData);         
-        setAudioList(audioData);  // audioList 상태 설정
-        console.log('d')
-      })     
+      const querySnapshot = await getDocs(collection(db, "trueBookList"));
+      const newData = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id }));
+      const audioData = newData.filter(item => item.audio === true);
+      setBookList(newData);         
+      setAudioList(audioData);
     }
 
-    async function getFireData() {      
-      await getDocs(collection(db, "originVoice"))
-      .then((querySnapshot)=>{               
-          const newData = querySnapshot.docs
-          .map((doc) => ({...doc.data(), id:doc.id }));
-          setTapeList(newData);         
-      })     
+    async function getFireData(collectionName: string, setter: Function) {
+      const querySnapshot = await getDocs(collection(db, collectionName));
+      const newData = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id }));
+      setter(newData);
     }
-    async function getNoteData() {
-      await getDocs(collection(db, "originNote"))
-      .then((querySnapshot)=>{               
-          const newData = querySnapshot.docs
-          .map((doc) => ({...doc.data(), id:doc.id }));
-          setNoteList(newData);         
-          console.log('노트', newData)
-      })         
-    }
+
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
     };    
 
     useEffect(() => {
-      getBookList()
-      getFireData()
-      getNoteData()
-      if (tapeList != null) {
-        const tapeList = getFireData()
-      }
-      if (noteList != null) {
-        const noteList = getNoteData()
-      }      
+      getBookList();
+      getFireData("originVoice", setTapeList);
+      getFireData("originNote", setNoteList);
     }, []);
 
     return (
@@ -136,4 +106,4 @@ const BookMain: React.FC = () => {
     )
 }
 
-export default BookMain
+export default BookMain;
