@@ -1,9 +1,14 @@
 import React, { ChangeEvent, MouseEvent, FormEvent, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+
 import DDayCount from '../../books/compornents/dday'
 import MyBtn from '../ui_elements/MyBtn';
+
+// ui
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+
+// fire base
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../../src/firebase';
 
@@ -46,18 +51,16 @@ const LoginForm: React.FC  = () => {
         }
     }
 
-    // useEffect(() => {
-    //     authService.onAuthStateChanged((user) => {
-    //       console.log(user);
-    //       if (user) {            
-    //         setIsLoggedIn(true);
-    //         navigate('/BookMain');
-    //       } else {
-    //         // 로그아웃 된 상태일 경우
-    //         setIsLoggedIn(false);
-    //       }
-    //     });
-    //   }, []);
+    useEffect(() => {
+        authService.onAuthStateChanged((user) => {
+          console.log(user);
+          if (user) {            
+            navigate('/BookMain');
+          } else {
+            navigate('/intro');            
+          }
+        });
+    }, []);
 
     return (
         <div className="login__form">

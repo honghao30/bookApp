@@ -44,4 +44,7 @@ export interface buttonType {
     onClick?: () => void 
 }
 //teat area
+
+
+
 export type TextAreaProps = Omit<InputProps, 'type'>;
