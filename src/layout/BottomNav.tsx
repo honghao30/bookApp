@@ -74,11 +74,11 @@ const BottomNav: React.FC = () => {
           icon={<TravelExploreIcon />}
           onClick={ alertMsg }
         />
-        <BottomNavigationAction
+        {/* <BottomNavigationAction
           label="오디오"
           value="오디오"
           icon={<VolumeUpIcon />}
-        />
+        /> */}
       {/* <BottomNavigationAction
           label="절기"
           value="절기"

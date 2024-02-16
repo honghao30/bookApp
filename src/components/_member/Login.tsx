@@ -1,23 +1,23 @@
-import React, { FormEvent, useState, useEffect } from 'react'
+import React, { ChangeEvent, MouseEvent, FormEvent, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import DDayCount from '../../books/compornents/dday'
 import MyBtn from '../ui_elements/MyBtn';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-
-import { useRecoilState } from 'recoil';
-import { login, isLoggedInState, signOut } from '../../recoil/authAtom';
-
-import { getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../../src/firebase';
 
 const LoginForm: React.FC  = () => {  
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');    
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');    
     const [newAccount, setNewAccount] = useState(true);
     const [error, setError] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [open, setOpen] = useState(false)
+    const [fields, setFields] = useState({
+        email: '',
+        password: '',
+    })
 
     const navigate = useNavigate();
 
@@ -29,44 +29,33 @@ const LoginForm: React.FC  = () => {
         setOpen(prevOpen => !prevOpen);
     }
 
-    const onChange = (event: { target: { name: any; value: any; }; }) => {
-        const {target: {name, value}} = event;
-        if (name==='email') {            
-            setEmail(value)            
-        } else if (name=== "password") {
-            setPassword(value);            
-        }
-    } 
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFields({
+          ...fields,
+          [e.target.name]: e.target.value,
+        })
+    }
 
-    const Handlelogin = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();     
-        const formData = {
-           email: email,
-           password: password,
-        };    
-        try {          
-            const loggedInUser = await login(formData);
-            // setUser(loggedInUser);
-            // setIsLoggedIn(true);                    
-            // navigate("/Main")  
-            } catch (error) {
-            console.error(error); // 이 부분은 에러처리를 원하는 방식으로 변경하실 수 있습니다.
-        }                 
-        // try {
-        //   await signInWithEmailAndPassword(authService, formData.email, formData.password);
-        //   setLoggedInState(true); 
-        //   navigate('/BookMain');
-        // } catch (e) {
-        //   setError(e.message.replace("Firebase: Error ", ""));
-        // }
+    const login = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();          
+        try {
+            await signInWithEmailAndPassword(authService, fields.email, fields.password);  
+            navigate('/BookMain');          
+        } catch (e) {
+            return e.message.replace("Firebase: Error ", "");
+        }
     }
 
     // useEffect(() => {
     //     authService.onAuthStateChanged((user) => {
-    //         console.log(user);
-    //         if (user) {
-    //             navigate('/BookMain');
-    //         }
+    //       console.log(user);
+    //       if (user) {            
+    //         setIsLoggedIn(true);
+    //         navigate('/BookMain');
+    //       } else {
+    //         // 로그아웃 된 상태일 경우
+    //         setIsLoggedIn(false);
+    //       }
     //     });
     //   }, []);
 
@@ -90,10 +79,10 @@ const LoginForm: React.FC  = () => {
             </div>            
             {open &&
             <div className='admin-login__area'>
-                <form onSubmit={Handlelogin}>
+                <form onSubmit={login}>
                     <div className='login__inner'>
-                        <p><input name="email" type="email" placeholder="Email" required value={email} onChange={onChange} /></p>
-                        <p><input name="password" type="password" placeholder="password" required value={password} onChange={onChange} /></p>
+                        <p><input name="email" type="email" placeholder="Email" required value={fields.email} onChange={onChange} /></p>
+                        <p><input name="password" type="password" placeholder="password" required value={fields.password} onChange={onChange} /></p>
                     </div>
                     {error && <p>{error}</p>} 
                     <MyBtn
