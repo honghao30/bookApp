@@ -4,6 +4,7 @@ import InsetList from './List';
 import NoteList from './NoteList';
 import OriginVoice from './TapeList';
 import AudioLists from './AudioList';
+import Loading from './compornents/Loading';
 
 // ui
 import Tabs from '@mui/material/Tabs';
@@ -77,6 +78,14 @@ const BookMain: React.FC = () => {
       getFireData("originVoice", setTapeList);
       getFireData("originNote", setNoteList);
     }, []);
+
+    if (!bookList.length) {
+      return (
+        <div>
+          <Loading />
+        </div>
+      );
+    }
 
     return (
       <div className='book-content'>
