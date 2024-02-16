@@ -1,9 +1,16 @@
 import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
+// ui
+import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+
+// fire base
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../../src/firebase';
 
 const MyMenuList: React.FC = () => {  
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -18,6 +25,29 @@ const MyMenuList: React.FC = () => {
       setAnchorEl(null);
     };
 
+    const goMypage = () => {
+      alert('준비중입니다.')
+      setAnchorEl(null);
+    }
+
+    //Logout 하는 함수
+    const logout = async () => {
+      await signOut(authService);
+      setAnchorEl(null);
+      return;
+    }
+
+    useEffect(() => {
+      authService.onAuthStateChanged((user) => {
+        console.log(user);
+        if (user) {            
+          navigate('/BookMain');
+        } else {
+          navigate('/intro');            
+        }
+      });
+  }, []);
+      
   return (
     <div>
         <IconButton
@@ -45,9 +75,9 @@ const MyMenuList: React.FC = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>Profile Modify</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={ goMypage }>Profile</MenuItem>
+          <MenuItem onClick={ goMypage }>Profile Modify</MenuItem>
+          <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
   </div>    
   );
