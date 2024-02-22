@@ -74,9 +74,20 @@ const BookList: React.FC = () => {
               [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
-                <Link to={`/ReadCommon/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookIds }}>
-                  {book.subject} {book.id} {book.url} {bookIds}
-                </Link>
+                {onlyAudio ? (
+                  <div>
+                  <iframe 
+                    src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
+                    title="오디오 플레이어" 
+                    width="100%" 
+                    height="100px">
+                </iframe>                   
+                </div>
+                ) : (
+                  <Link to={`/ReadCommon/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookIds }}>
+                    {book.subject} {book.id} {book.url} {bookIds}
+                  </Link>
+               )}
               </ListItem>
             ))}  
             <ButtonArea>
