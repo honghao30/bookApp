@@ -7,8 +7,6 @@ export const generateToken = ():string => {
     return Math.random().toString(36).substr(2);
 }
 
-export const isLogin = () => !!localStorage.getItem('userInfo');
-
 // 날짜 시간 셋팅
 export const getTodayDate = (format: string) => {
    const weekdays: string[] = ['일', '월', '화', '수', '목', '금', '토'];

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import styled from "styled-components";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import Loading from './compornents/Loading';
+
+// fire base
 import { db } from '../../src/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { Button, Stack } from '@mui/material';
@@ -26,19 +26,18 @@ const SubTitle = styled.p `
   margin-bottom: 20px;
 `
 
-const BookSubList: React.FC = () => {  
+const BookList: React.FC = () => {  
     const [book, setBook] = useState(null);
     const { bookId } = useParams();
     const location = useLocation();
-    const cates = location.state.cates;
+    const { cates, index, bookIds } = location.state;
     
     const getBookList = async () => {    
-      await getDocs(collection(db, bookId))
+      await getDocs(collection(db, bookIds))
       .then((querySnapshot)=>{               
           const newData = querySnapshot.docs
           .map((doc) => ({...doc.data(), id:doc.id }));
-          setBook(newData);         
-          console.log('노트', newData)
+          setBook(newData);                   
       })     
     }
 
@@ -50,9 +49,7 @@ const BookSubList: React.FC = () => {
 
     if (!book) {
       return <div>
-            <Box sx={{ width: '100%', height: '200px', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-              <CircularProgress />
-            </Box>
+            <Loading />
       </div>;
     }
 
@@ -66,8 +63,8 @@ const BookSubList: React.FC = () => {
               [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
-                <Link to={`/ReadDetail/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookId }}>
-                  {book.subject} {book.id}
+                <Link to={`/ReadCommon/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookIds }}>
+                  {book.subject} {book.id} {bookId} {bookIds}
                 </Link>
               </ListItem>
             ))}            
@@ -76,4 +73,4 @@ const BookSubList: React.FC = () => {
     )
 }
 
-export default BookSubList;
+export default BookList;

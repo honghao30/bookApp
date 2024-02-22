@@ -51,16 +51,16 @@ const LoginForm: React.FC  = () => {
         }
     }
 
-    useEffect(() => {
-        authService.onAuthStateChanged((user) => {
-          console.log(user);
-          if (user) {            
-            navigate('/BookMain');
-          } else {
-            navigate('/intro');            
-          }
-        });
-    }, []);
+    // useEffect(() => {
+    //     authService.onAuthStateChanged((user) => {
+    //       console.log(user);
+    //       if (user) {            
+    //         navigate('/BookMain');
+    //       } else {
+    //         navigate('/Intro');            
+    //       }
+    //     });
+    // }, []);
 
     return (
         <div className="login__form">

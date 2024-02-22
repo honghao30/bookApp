@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import InsetList from './List';
-import NoteList from './NoteList';
-import OriginVoice from './TapeList';
-import AudioLists from './AudioList';
+import CateList from './ListCmmon';
+// import InsetList from './List';
+// import NoteList from './NoteList';
+// import OriginVoice from './TapeList';
+// import AudioLists from './AudioList';
 import Loading from './compornents/Loading';
 
 // ui
@@ -50,10 +51,10 @@ function a11yProps(index: number) {
 
 const BookMain: React.FC = () => {
     const [value, setValue] = React.useState(0);
-    const [bookList, setBookList] = useState([]);
-    const [noteList, setNoteList] = useState([]);   
-    const [tapeList, setTapeList] = useState([]);
+    const [bookList, setBookList] = useState([]);    
     const [audioList, setAudioList] = useState([]);    
+    const [noteList, setNoteList] = useState([]);    
+    const [tapeList, setTapeList] = useState([]);    
 
     async function getBookList() {      
       const querySnapshot = await getDocs(collection(db, "trueBookList"));
@@ -99,16 +100,16 @@ const BookMain: React.FC = () => {
             </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              <InsetList dataList={bookList} />
+              <CateList dataList={bookList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <NoteList noteList={noteList} />
+              <CateList dataList={noteList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              <OriginVoice tapeList={tapeList} />
+              <CateList dataList={tapeList} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-              <AudioLists audioList={audioList} />
+              <CateList dataList={audioList} />
             </CustomTabPanel>        
         </Box>
       </div>

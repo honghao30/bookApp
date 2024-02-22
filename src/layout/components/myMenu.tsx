@@ -9,8 +9,8 @@ import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 // fire base
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../../src/firebase';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const MyMenuList: React.FC = () => {  
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -38,12 +38,13 @@ const MyMenuList: React.FC = () => {
     }
 
     useEffect(() => {
-      authService.onAuthStateChanged((user) => {
+      authService.onAuthStateChanged((user: any) => {
         console.log(user);
         if (user) {            
           navigate('/BookMain');
         } else {
-          navigate('/intro');            
+          alert('로그인 하셔야 합니다.');
+          navigate('/');            
         }
       });
   }, []);
