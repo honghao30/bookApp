@@ -42,11 +42,21 @@ const fabStyle = {
 const AudioSection = styled.div`
   padding: 30px 0;
 `
+const ButtonArea = styled.div `
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  .MuiStack-root {
+    gap: 5px;
+  }
+`
 const ReadCommon: React.FC = () => {  
   const [book, setBook] = useState(null);
   const [value, setValue] = useState(0);
   const location = useLocation();
-  const { bookId, cates, index } = location.state;
+  const { bookId, cates, index, realVoice, onlyAudio } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
   const { id } = useParams();
 
@@ -66,9 +76,25 @@ const ReadCommon: React.FC = () => {
       setBook(docSnap.data())
     }      
   }
+  const getFireData = async () => {    
+    const docRef = doc(db, "originVoice", id);  
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      setBook(docSnap.data())
+    }    
+  }
+
+  const editPost = () => {
+    console.log('수정')
+  }
 
   useEffect(() => {
-    getBookDetail();
+    if (realVoice) {
+        getFireData();
+      } else {
+        getBookDetail();
+      }    
     window.addEventListener("scroll", () => {
       if (window.scrollY > 400) {
           setShowTopBtn(true);
@@ -108,14 +134,24 @@ const ReadCommon: React.FC = () => {
           </Zoom>
         ))}     
 
-        {/* // 오디오 영역 */}
-        {book.url !== null && (
+        {realVoice && book.url !== undefined && book.url !== '' && (
+        <div className='youtube-wrap'>
+            <iframe src={`https://www.youtube.com/embed/${book.url}`} title={book.subject}></iframe>
+        </div>
+        )}
+
+        {!realVoice && book.url !== undefined && book.url !== '' && (
         <AudioSection>
             <iframe src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} title="오디오 플레이어" width="100%" height="60px"></iframe>
         </AudioSection>
         )}
        <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />  
-      </div>
+       <ButtonArea>
+          <Stack direction="row">          
+            <Button variant="outlined" onClick={ editPost }>수정</Button>                                               
+          </Stack>
+        </ButtonArea>            
+      </div>   
       <BottomNav />  
     </> 
   )

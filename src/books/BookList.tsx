@@ -25,13 +25,26 @@ const SubTitle = styled.p `
   padding: 15px 0;
   margin-bottom: 20px;
 `
-
+const ButtonArea = styled.div `
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  .MuiStack-root {
+    gap: 5px;
+  }
+`
 const BookList: React.FC = () => {  
     const [book, setBook] = useState(null);
     const { bookId } = useParams();
     const location = useLocation();
-    const { cates, index, bookIds } = location.state;
-    
+    const { cates, index, bookIds, realVoice, onlyAudio } = location.state;
+
+    const addPost = () => {
+      console.log('adding', dataList)
+    }    
+
     const getBookList = async () => {    
       await getDocs(collection(db, bookIds))
       .then((querySnapshot)=>{               
@@ -44,8 +57,6 @@ const BookList: React.FC = () => {
     useEffect(() => {
       getBookList()      
     }, []);
-    
-    
 
     if (!book) {
       return <div>
@@ -64,10 +75,15 @@ const BookList: React.FC = () => {
       }, index: Key | null | undefined) => (
               <ListItem key={index}>
                 <Link to={`/ReadCommon/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookIds }}>
-                  {book.subject} {book.id} {bookId} {bookIds}
+                  {book.subject} {book.id} {book.url} {bookIds}
                 </Link>
               </ListItem>
-            ))}            
+            ))}  
+            <ButtonArea>
+                <Stack direction="row">          
+                    <Button variant="outlined" onClick={ addPost }>등록</Button>                                               
+                </Stack>
+            </ButtonArea>                         
           </List>
       </div>
     )

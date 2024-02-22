@@ -10,6 +10,8 @@ interface CateListProps {
       subject: string; 
       id: string; 
     }[];
+    realVoice: boolean;
+    onlyAudio: boolean;    
 }
 const ButtonArea = styled.div `
   margin: 20px 0;
@@ -21,7 +23,7 @@ const ButtonArea = styled.div `
     gap: 5px;
   }
 `
-const CateList: React.FC<CateListProps> = ({ dataList }) => {
+const CateList: React.FC<CateListProps> = ({ dataList, realVoice, onlyAudio }) => {
 
 const List = styled.ul `
   display: block;
@@ -38,9 +40,15 @@ const addPost = () => {
     <List>
       {dataList.map((book, index) => (
         <ListItem key={index}>
-          <Link to={`/BookList/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId }}>
-            {book.subject}
-          </Link>
+            {realVoice ? (
+              <Link to={`/ReadCommon/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
+                {book.subject}
+              </Link>
+            ) : (
+              <Link to={`/BookList/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
+                {book.subject}
+              </Link>
+            )} 
         </ListItem>
       ))}          
       <ButtonArea>

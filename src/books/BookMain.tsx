@@ -100,16 +100,16 @@ const BookMain: React.FC = () => {
             </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              <CateList dataList={bookList} />
+              <CateList dataList={bookList} realVoice={false} onlyAudio={false} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <CateList dataList={noteList} />
+              <CateList dataList={noteList} realVoice={false} onlyAudio={false} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              <CateList dataList={tapeList} />
+              <CateList dataList={tapeList} realVoice={true} onlyAudio={false} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-              <CateList dataList={audioList} />
+              <CateList dataList={audioList} realVoice={false} onlyAudio={true} />
             </CustomTabPanel>        
         </Box>
       </div>
