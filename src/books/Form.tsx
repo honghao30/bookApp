@@ -9,7 +9,7 @@ import "react-quill/dist/quill.snow.css"
 import ReactQuill from "react-quill"
 
 //fire base
-// import { db, authService } from '../../src/firebase';
+// import { db } from '../../src/firebase';
 // import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
 // import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
@@ -57,8 +57,8 @@ const Form: React.FC = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const quillRef = useRef()
 
-    const { typeId } = useParams();
-    const location = useLocation();
+    // const { typeId } = useParams();
+    // const location = useLocation();
     // const { cates, index, bookId } = location.state;
 
     const modules = useMemo(() => {
@@ -88,10 +88,6 @@ const Form: React.FC = () => {
         navigate(-1);  
     }
 
-  function setTape(arg0: any): void {
-    throw new Error('Function not implemented.');
-  }
-
     return (
         <div className='book-content'>
           <SubTitle>
@@ -106,7 +102,7 @@ const Form: React.FC = () => {
                   theme="snow"
                   ref={quillRef}
                   value={ content }
-                  onChange={(content) => setTape({ ...content, content })}
+                  onChange={(content) => setContent({ ...content, content })}
                   modules={modules}
                 />                     
                     <ButtonArea>
