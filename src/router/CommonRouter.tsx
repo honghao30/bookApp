@@ -3,7 +3,7 @@ import { Routes, Route, Navigate  } from 'react-router-dom'
 
 // 레이아웃
 import Intro from '../pages/Intro'
-// import Form from '../pages/Form'
+import Form from '../books/Form'
 import OnlyBodyLy from '../layout/onlyBodyLy';
 import BookMainLayout from '../layout/BookMainLayout';
 
@@ -26,7 +26,10 @@ function CommonRouter() {
           </Route> 
           <Route element={<OnlyBodyLy />}>          
             <Route path="/ReadCommon/:id" element={<ReadCommon />} />                      
-          </Route>                                 
+          </Route>  
+          <Route element={<BookMainLayout />}>          
+            <Route path="/Form" element={<Form />} />                      
+          </Route>                                          
       </Routes>
     )
   }

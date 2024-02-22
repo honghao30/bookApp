@@ -1,11 +1,17 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import MyBtn from '../components/ui_elements/MyBtn';
-import { db, authService } from '../../src/firebase';
-import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+//edit
+import "react-quill/dist/quill.snow.css"
+import ReactQuill from "react-quill"
+
+//fire base
+// import { db, authService } from '../../src/firebase';
+// import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
+// import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -44,41 +50,72 @@ const ButtonArea = styled.div `
   }
 `
 
-const FormMode: React.FC = () => {
-    const [noteDetail, setNoteDetail] = useState(null);
+const Form: React.FC = () => {
+    const [content, setContent] = useState({});
     const navigate = useNavigate();
-    
+    const [editing, setEditing] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const quillRef = useRef()
+
+    const { typeId } = useParams();
+    const location = useLocation();
+    // const { cates, index, bookId } = location.state;
+
+    const modules = useMemo(() => {
+      return {
+        toolbar: {
+          container: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            ["blockquote"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ color: [] }, { background: [] }],
+            [{ align: [] }, "link", "image"],
+          ],
+        },
+      }
+    }, [])
+
+
     const updateDoc = () => {
        console.log('updateDoc');
     }
     const onChange = (e) => {
-        setNoteDetail(e.target.value);
+      setContent(e.target.value);
     };
     
     const cancel = () => {
         navigate(-1);  
     }
 
+  function setTape(arg0: any): void {
+    throw new Error('Function not implemented.');
+  }
+
     return (
         <div className='book-content'>
           <SubTitle>
-            {cates}
+            {/* {cates} */}
           </SubTitle>      
-          <BookContent>
-                {/* {noteId, noteDetail.content}     */}
+          <BookContent>                
             <TextAreaWrap>
                 <form onSubmit={ updateDoc }>              
-                    <textarea
-                    value={ noteDetail.content }
-                    onChange={onChange}
-                    ></textarea>
+                <ReactQuill
+                  style={{ width: "100%", height: "550px" }}
+                  placeholder=""
+                  theme="snow"
+                  ref={quillRef}
+                  value={ content }
+                  onChange={(content) => setTape({ ...content, content })}
+                  modules={modules}
+                />                     
                     <ButtonArea>
                     <MyBtn
                         type="submit"                      
                         iconOnly={false}
                         btnColor={'btn-primary'}
                         btnSize={'medium'}
-                    >수정</MyBtn> 
+                    >저장</MyBtn> 
                     <MyBtn
                         type="button"                      
                         iconOnly={false}
@@ -93,4 +130,4 @@ const FormMode: React.FC = () => {
         </div>
       )
 }
-export default FormMode;
+export default Form;
