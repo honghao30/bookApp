@@ -2,7 +2,7 @@
 import styled from "styled-components";
 // ui
 import { Button, Stack } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface CateListProps {
     dataList: {
@@ -23,18 +23,23 @@ const ButtonArea = styled.div `
     gap: 5px;
   }
 `
-const CateList: React.FC<CateListProps> = ({ dataList, realVoice, onlyAudio }) => {
-
 const List = styled.ul `
-  display: block;
+display: block;
 `;
 const ListItem = styled.li `
-  font-size: 15px;
-  padding: 6px 0;
+font-size: 15px;
+padding: 6px 0;
 `
-const addPost = () => {
-  console.log('adding', dataList)
-}
+const CateList: React.FC<CateListProps> = ({ dataList, realVoice, onlyAudio }) => {
+  const navigate = useNavigate();
+
+  const addPost = () => {
+    const state = {      
+      index: dataList.length,      
+      bookCates: dataList.map((item) => item.bookcate)
+    };
+    navigate('/Form', { state });
+  };
 
   return (
     <List>

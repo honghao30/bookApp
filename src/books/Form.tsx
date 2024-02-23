@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import MyBtn from '../components/ui_elements/MyBtn';
 import styled from 'styled-components';
-import MyCheck from '../components/_form/_checkbox';
 
 //edit
 import "react-quill/dist/quill.snow.css"
 import ReactQuill from "react-quill"
-
-//ui
-import { Checkbox } from '@mui/material';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -21,8 +18,8 @@ const SubTitle = styled.p `
 const BookContent = styled.div `
   font-size: 18px;
   line-height:28px;
-  margin-bottom: 10px;
-  padding-bottom: 70px;
+  margin-bottom: 5px;
+  padding-bottom: 10px;
 `
 
 const TextAreaWrap = styled.div `
@@ -75,7 +72,16 @@ const Form: React.FC = () => {
     const [isCheck, setIsCheck] = useState(false);
     const [originUrl, SetOrigin] = useState(null);
     const [fullBible, SetFullBible] = useState(null);
+    const [writer, SetWriter] = useState(null);
+    const [audioUrl, setAudioUrl] = useState(null);
+    const location = useLocation();
+    const { index, bookCates } = location.state || {};
+    const [callType, setCallType] = useState(bookCates);
     const quillRef = useRef()
+
+    useEffect(() => {
+        console.log('호출정보', index, callType)
+    }, []);
 
     const modules = useMemo(() => {
       return {
@@ -92,36 +98,51 @@ const Form: React.FC = () => {
       }
     }, [])
 
-    const handleSubjectChange = (e) => {
+    const handleWriterChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
+      SetWriter(e.target.value);
+    };
+
+    const handleSubjectChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
       setSubject(e.target.value);
     };
     
-    const handleUrlChange = (e) => {
-      SetUr(e.target.value);
+    const handleUrlChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
+      SetUrl(e.target.value);
     };
     
-    const handleOriginUrlChange = (e) => {
+    const handleOriginUrlChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
       SetOrigin(e.target.value);
     };
     
-    const handleIsCheckChange = (e) => {
+    const handleIsCheckChange = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
       setIsCheck(e.target.checked);
     };  
   
-    const handleAudioChange = (e) => {
-      SetUrl(e.target.checked);
+    const handleAudioChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
+      setAudioUrl(e.target.value);
     };
 
-    const handleBookContentChange = (content) => {
+    const handleBookContentChange = (content: React.SetStateAction<null>) => {
       setBookCont(content);
     }
 
-    const handleFullBibleChange = (content) => {
+    const handleFullBibleChange = (content: React.SetStateAction<null>) => {
       SetFullBible(content);
     };
     
-    const updateDoc = () => {
-       console.log('updateDoc');
+    const updateDoc = (e) => {
+      e.preventDefault();
+      const formData = {
+        write: writer,
+        subject: subject, 
+        url: url, 
+        originUrl: originUrl, 
+        isCheck: isCheck, 
+        audioUrl: audioUrl, 
+        bookCont: bookCont,
+        fullBible: fullBible
+      }
+      console.log('등록할 내용:', formData);     
     }
     
     const cancel = () => {
@@ -130,9 +151,14 @@ const Form: React.FC = () => {
 
     return (
         <div className='book-content'>
+          <form onSubmit={ updateDoc }>      
           <SubTitle>
-            {/* {cates} */}
+            등록 화면
           </SubTitle>      
+          <SubjectArea>
+              <label htmlFor='title'>작성자</label>
+              <p><input name="writer" type="text" placeholder="write" value={writer || ''} onChange={handleWriterChange} /></p>
+          </SubjectArea>            
           <SubjectArea>
               <label htmlFor='title'>제목</label>
               <p><input name="subject" type="text" placeholder="subject" value={subject || ''} onChange={handleSubjectChange} /></p>
@@ -148,22 +174,20 @@ const Form: React.FC = () => {
           <SubjectArea>
               <label htmlFor='title'>오디오 북 유무</label>
               <p>
-                <MyCheck
-                  label="있음"
+                <input type="checkbox"
                   value="isCheck"                  
                   name={'isCheck'}
                   checked={isCheck}
-                  onChange={handleIsCheckChange}                       
-                />                
+                  onChange={handleIsCheckChange}    
+                />
               </p>
           </SubjectArea>  
           <SubjectArea>
               <label htmlFor='title'>오디오 링크</label>
-              <p><input name="url" type="text" placeholder="url" required value={url} onChange={handleAudioChange} /></p>
+              <p><input name="audioUrl" type="text" placeholder="url" value={audioUrl || ''} onChange={handleAudioChange} /></p>
           </SubjectArea>                         
           <BookContent>    
-            <TextAreaWrap>
-                <form onSubmit={ updateDoc }>              
+            <TextAreaWrap>                
                 <ReactQuill
                   style={{ width: "100%", height: "550px", overflow: "auto" }}
                   placeholder=""
@@ -172,28 +196,12 @@ const Form: React.FC = () => {
                   value={bookCont || ''}
                   onChange={handleBookContentChange} // Pass the content directly
                   modules={modules}
-                />                   
-                  <ButtonArea>
-                    <MyBtn
-                        type="submit"                      
-                        iconOnly={false}
-                        btnColor={'btn-primary'}
-                        btnSize={'medium'}
-                    >저장</MyBtn> 
-                    <MyBtn
-                        type="button"                      
-                        iconOnly={false}
-                        btnColor={'btn-secondary'}
-                        btnSize={'medium'}
-                        onClick={ cancel}
-                    >취소</MyBtn>                 
-                    </ButtonArea>              
-                </form>
+                />                            
             </TextAreaWrap>
           </BookContent> 
+          {fullBible &&
           <BookContent>    
-            <TextAreaWrap>
-                <form onSubmit={ updateDoc }>              
+            <TextAreaWrap>                        
                 <ReactQuill
                   style={{ width: "100%", height: "550px", overflow: "auto" }}
                   placeholder=""
@@ -202,25 +210,26 @@ const Form: React.FC = () => {
                   value={fullBible || ''}
                   onChange={handleFullBibleChange}
                   modules={modules}
-                />                   
-                  <ButtonArea>
-                    <MyBtn
-                        type="submit"                      
-                        iconOnly={false}
-                        btnColor={'btn-primary'}
-                        btnSize={'medium'}
-                    >저장</MyBtn> 
-                    <MyBtn
-                        type="button"                      
-                        iconOnly={false}
-                        btnColor={'btn-secondary'}
-                        btnSize={'medium'}
-                        onClick={ cancel}
-                    >취소</MyBtn>                 
-                    </ButtonArea>              
-                </form>
+                /> 
             </TextAreaWrap>
-          </BookContent>                               
+          </BookContent>    
+          } 
+              <ButtonArea>
+                <MyBtn
+                    type="submit"                      
+                    iconOnly={false}
+                    btnColor={'btn-primary'}
+                    btnSize={'medium'}
+                >저장</MyBtn> 
+                <MyBtn
+                    type="button"                      
+                    iconOnly={false}
+                    btnColor={'btn-secondary'}
+                    btnSize={'medium'}
+                    onClick={ cancel}
+                >취소</MyBtn>                 
+              </ButtonArea>     
+            </form>                      
         </div>
       )
 }
