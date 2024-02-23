@@ -11,7 +11,8 @@ interface CateListProps {
       id: string; 
     }[];
     realVoice: boolean;
-    onlyAudio: boolean;    
+    onlyAudio: boolean; 
+    userAdds: boolean;   
 }
 const ButtonArea = styled.div `
   margin: 20px 0;
@@ -30,7 +31,7 @@ const ListItem = styled.li `
 font-size: 15px;
 padding: 6px 0;
 `
-const CateList: React.FC<CateListProps> = ({ dataList, realVoice, onlyAudio }) => {
+const CateList: React.FC<CateListProps> = ({ dataList, userAdds, realVoice, onlyAudio }) => {
   const navigate = useNavigate();
 
   const addPost = () => {
@@ -55,12 +56,15 @@ const CateList: React.FC<CateListProps> = ({ dataList, realVoice, onlyAudio }) =
               </Link>
             )} 
         </ListItem>
-      ))}          
-      <ButtonArea>
-        <Stack direction="row">          
-            <Button variant="outlined" onClick={ addPost }>등록</Button>                                               
-        </Stack>
-    </ButtonArea>   
+      ))} 
+      {
+        userAdds &&
+          <ButtonArea>
+            <Stack direction="row">          
+                <Button variant="outlined" onClick={ addPost }>등록</Button>                                               
+            </Stack>
+          </ButtonArea> 
+      }
     </List>
   );
 }

@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 
 // fire base
 import { db } from '../../src/firebase';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy} from "firebase/firestore";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -96,16 +96,16 @@ const BookMain: React.FC = () => {
             </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              <CateList dataList={bookList} realVoice={false} onlyAudio={false} />
+              <CateList dataList={bookList} userAdds={true} realVoice={false} onlyAudio={false} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <CateList dataList={noteList} realVoice={false} onlyAudio={false} />
+              <CateList dataList={noteList} userAdds={false} realVoice={false} onlyAudio={false} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              <CateList dataList={tapeList} realVoice={true} onlyAudio={false} />
+              <CateList dataList={tapeList}  userAdds={false} realVoice={true} onlyAudio={false} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-              <CateList dataList={audioList} realVoice={false} onlyAudio={true} />
+              <CateList dataList={audioList}  userAdds={false} realVoice={false} onlyAudio={true} />
             </CustomTabPanel>        
         </Box>
       </div>

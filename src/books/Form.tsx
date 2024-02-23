@@ -82,7 +82,7 @@ const Form: React.FC = () => {
     const [audioUrl, setAudioUrl] = useState(null);
     const location = useLocation();
     const { index, bookCates } = location.state || {};
-    const [callType, setCallType] = useState(bookCates);
+    const [callType, setCallType] = useState(bookCates[0]);
     const quillRef = useRef()
 
     const navigate = useNavigate();
@@ -143,11 +143,13 @@ const Form: React.FC = () => {
         dbType = callType;
       }
       const formData = {   
+        bookcate: dbType,
+        bookId: `bookId${index + 1}`,
         write: writer,
         subject: subject, 
         url: url, 
         originUrl: originUrl, 
-        isCheck: isCheck, 
+        audio: isCheck, 
         audioUrl: audioUrl, 
         bookCont: bookCont,
         fullBible: fullBible        
@@ -155,9 +157,8 @@ const Form: React.FC = () => {
       console.log('등록할 내용:', dbType, formData);         
       try {
         const docRef = await setDoc(doc(db, dbType, `${index + 1}`), formData);
-        console.log('Document written with ID: ', docRef.id);
-        // 데이터가 성공적으로 추가된 후에 페이지를 이동하거나 다른 작업을 수행할 수 있습니다.
-        // navigate('/BookMain');
+        console.log('Document written with ID: ', docRef);        
+        navigate('/BookMain');
       } catch (e) {
         console.error('Error adding document: ', e);
       } 
@@ -180,32 +181,39 @@ const Form: React.FC = () => {
           <SubjectArea>
               <label htmlFor='title'>제목</label>
               <p><input name="subject" type="text" placeholder="subject" value={subject || ''} onChange={handleSubjectChange} /></p>
-          </SubjectArea>     
+          </SubjectArea>   
+          {callType == 'trueBookList' &&               
           <SubjectArea>
               <label htmlFor='title'>URL</label>
               <p><input name="url" type="text" placeholder="url"  value={url || ''} onChange={handleUrlChange} /></p>
-          </SubjectArea>    
+          </SubjectArea>
+          }
           <SubjectArea>
               <label htmlFor='title'>원본 링크</label>
               <p><input name="originUrl" type="text" placeholder="originUrl" value={originUrl || ''} onChange={handleOriginUrlChange} /></p>
-          </SubjectArea>                    
-          <SubjectArea>
-              <label htmlFor='title'>오디오 북 유무</label>
-              <p>
-                <input type="checkbox"
-                  value="isCheck"                  
-                  name={'isCheck'}
-                  checked={isCheck}
-                  onChange={handleIsCheckChange}    
-                />
-              </p>
-          </SubjectArea>  
-          <SubjectArea>
-              <label htmlFor='title'>오디오 링크</label>
-              <p><input name="audioUrl" type="text" placeholder="url" value={audioUrl || ''} onChange={handleAudioChange} /></p>
-          </SubjectArea>                         
-          <BookContent>    
-            <TextAreaWrap>                
+          </SubjectArea>     
+          {callType == 'trueBookList' && 
+          <>
+            <SubjectArea>
+                <label htmlFor='title'>오디오 북 유무</label>
+                <p>
+                  <input type="checkbox"
+                    value="isCheck"                  
+                    name={'isCheck'}
+                    checked={isCheck}
+                    onChange={handleIsCheckChange}    
+                  />
+                </p>
+            </SubjectArea>
+            <SubjectArea>
+                <label htmlFor='title'>오디오 링크</label>
+                <p><input name="audioUrl" type="text" placeholder="url" value={audioUrl || ''} onChange={handleAudioChange} /></p>
+            </SubjectArea>
+          </>               
+           }  
+          {callType !== 'trueBookList' && callType !== 'originNote' &&                     
+            <BookContent>    
+              <TextAreaWrap>                
                 <ReactQuill
                   style={{ width: "100%", height: "550px", overflow: "auto" }}
                   placeholder=""
@@ -215,8 +223,9 @@ const Form: React.FC = () => {
                   onChange={handleBookContentChange} // Pass the content directly
                   modules={modules}
                 />                            
-            </TextAreaWrap>
-          </BookContent> 
+              </TextAreaWrap>
+            </BookContent> 
+          }
           {fullBible &&
           <BookContent>    
             <TextAreaWrap>                        
