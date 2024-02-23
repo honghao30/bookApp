@@ -136,14 +136,13 @@ const Form: React.FC = () => {
     
     const updateDoc = async (e) => {
       e.preventDefault();
-      let dbTye;
+      let dbType;
       if (index > 1) {
-        dbTye = callType[0];
+        dbType = callType[0];
       } else {
-        dbTye = callType;
+        dbType = callType;
       }
       const formData = {   
-        id: index + 1,     
         write: writer,
         subject: subject, 
         url: url, 
@@ -153,16 +152,15 @@ const Form: React.FC = () => {
         bookCont: bookCont,
         fullBible: fullBible        
       };
-      console.log('등록할 내용:', dbTye, formData);         
+      console.log('등록할 내용:', dbType, formData);         
       try {
-        const docRef = await addDoc(collection(db, 'trueBookList'), formData);
+        const docRef = await setDoc(doc(db, dbType, `${index + 1}`), formData);
         console.log('Document written with ID: ', docRef.id);
         // 데이터가 성공적으로 추가된 후에 페이지를 이동하거나 다른 작업을 수행할 수 있습니다.
         // navigate('/BookMain');
       } catch (e) {
         console.error('Error adding document: ', e);
-      }       
-      
+      } 
     }
     
     const cancel = () => {
