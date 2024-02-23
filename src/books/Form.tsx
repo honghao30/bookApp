@@ -1,8 +1,14 @@
 import * as React from 'react';
 import { useState, useRef, useMemo, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MyBtn from '../components/ui_elements/MyBtn';
 import styled from 'styled-components';
+
+//fire base
+import { db } from '../../src/firebase';
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc, setDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
 
 //edit
 import "react-quill/dist/quill.snow.css"
@@ -67,17 +73,19 @@ const ButtonArea = styled.div `
 
 const Form: React.FC = () => {
     const [bookCont, setBookCont] = useState(null);
+    const [writer, SetWriter] = useState('운영자');
     const [subject, setSubject] = useState(null);
     const [url, SetUrl] = useState(null);
     const [isCheck, setIsCheck] = useState(false);
     const [originUrl, SetOrigin] = useState(null);
-    const [fullBible, SetFullBible] = useState(null);
-    const [writer, SetWriter] = useState(null);
+    const [fullBible, SetFullBible] = useState(null);    
     const [audioUrl, setAudioUrl] = useState(null);
     const location = useLocation();
     const { index, bookCates } = location.state || {};
     const [callType, setCallType] = useState(bookCates);
     const quillRef = useRef()
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log('호출정보', index, callType)
@@ -97,10 +105,6 @@ const Form: React.FC = () => {
         },
       }
     }, [])
-
-    const handleWriterChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
-      SetWriter(e.target.value);
-    };
 
     const handleSubjectChange = (e: { target: { value: React.SetStateAction<null>; }; }) => {
       setSubject(e.target.value);
@@ -130,9 +134,16 @@ const Form: React.FC = () => {
       SetFullBible(content);
     };
     
-    const updateDoc = (e) => {
+    const updateDoc = async (e) => {
       e.preventDefault();
-      const formData = {
+      let dbTye;
+      if (index > 1) {
+        dbTye = callType[0];
+      } else {
+        dbTye = callType;
+      }
+      const formData = {   
+        id: index + 1,     
         write: writer,
         subject: subject, 
         url: url, 
@@ -140,9 +151,18 @@ const Form: React.FC = () => {
         isCheck: isCheck, 
         audioUrl: audioUrl, 
         bookCont: bookCont,
-        fullBible: fullBible
-      }
-      console.log('등록할 내용:', formData);     
+        fullBible: fullBible        
+      };
+      console.log('등록할 내용:', dbTye, formData);         
+      try {
+        const docRef = await addDoc(collection(db, 'trueBookList'), formData);
+        console.log('Document written with ID: ', docRef.id);
+        // 데이터가 성공적으로 추가된 후에 페이지를 이동하거나 다른 작업을 수행할 수 있습니다.
+        // navigate('/BookMain');
+      } catch (e) {
+        console.error('Error adding document: ', e);
+      }       
+      
     }
     
     const cancel = () => {
@@ -157,7 +177,7 @@ const Form: React.FC = () => {
           </SubTitle>      
           <SubjectArea>
               <label htmlFor='title'>작성자</label>
-              <p><input name="writer" type="text" placeholder="write" value={writer || ''} onChange={handleWriterChange} /></p>
+              <p><input name="writer" type="text" placeholder="운영자" readOnly value={writer} /></p>
           </SubjectArea>            
           <SubjectArea>
               <label htmlFor='title'>제목</label>
