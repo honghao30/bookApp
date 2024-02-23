@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import CateList from './ListCmmon';
-// import InsetList from './List';
-// import NoteList from './NoteList';
-// import OriginVoice from './TapeList';
-// import AudioLists from './AudioList';
 import Loading from './compornents/Loading';
 
 // ui

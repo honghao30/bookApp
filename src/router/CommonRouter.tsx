@@ -27,7 +27,7 @@ function CommonRouter() {
           <Route element={<OnlyBodyLy />}>          
             <Route path="/ReadCommon/:id" element={<ReadCommon />} />                      
           </Route>  
-          <Route element={<BookMainLayout />}>          
+          <Route element={<OnlyBodyLy />}>          
             <Route path="/Form" element={<Form />} />                      
           </Route>                                          
       </Routes>

@@ -1,17 +1,15 @@
 import * as React from 'react';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import MyBtn from '../components/ui_elements/MyBtn';
 import styled from 'styled-components';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import MyCheck from '../components/_form/_checkbox';
 
 //edit
 import "react-quill/dist/quill.snow.css"
 import ReactQuill from "react-quill"
 
-//fire base
-// import { db } from '../../src/firebase';
-// import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
-// import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+//ui
+import { Checkbox } from '@mui/material';
 
 const SubTitle = styled.p `
   font-size: 20px;
@@ -26,6 +24,7 @@ const BookContent = styled.div `
   margin-bottom: 10px;
   padding-bottom: 70px;
 `
+
 const TextAreaWrap = styled.div `
   width: 100%;
   max-width: 1280px;  
@@ -37,6 +36,25 @@ const TextAreaWrap = styled.div `
     height: 500px;
     border: 0;
     font-size: 16px;
+  }
+`
+const SubjectArea = styled.div `
+  width: 100%;
+  max-width: 1280px;  
+  padding: 2px;
+  font-weight: bold;
+  margin-bottom: 10px;  
+  label { 
+    display: block;
+    margin-bottom: 15px;  
+  }
+  input:not([type="checkbox"]) {
+    border: 1px solid #ddd;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    width: 100%;
+    text-indent: 10px;
   }
 `
 const ButtonArea = styled.div `
@@ -51,21 +69,19 @@ const ButtonArea = styled.div `
 `
 
 const Form: React.FC = () => {
-    const [content, setContent] = useState({});
-    const navigate = useNavigate();
-    const [editing, setEditing] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [bookCont, setBookCont] = useState(null);
+    const [subject, setSubject] = useState(null);
+    const [url, SetUrl] = useState(null);
+    const [isCheck, setIsCheck] = useState(false);
+    const [originUrl, SetOrigin] = useState(null);
+    const [fullBible, SetFullBible] = useState(null);
     const quillRef = useRef()
-
-    // const { typeId } = useParams();
-    // const location = useLocation();
-    // const { cates, index, bookId } = location.state;
 
     const modules = useMemo(() => {
       return {
         toolbar: {
           container: [
-            [{ header: [1, 2, 3, false] }],
+            [{ header: [1, 2, 3, 4, 5, false] }],
             ["bold", "italic", "underline", "strike"],
             ["blockquote"],
             [{ list: "ordered" }, { list: "bullet" }],
@@ -76,13 +92,37 @@ const Form: React.FC = () => {
       }
     }, [])
 
+    const handleSubjectChange = (e) => {
+      setSubject(e.target.value);
+    };
+    
+    const handleUrlChange = (e) => {
+      SetUr(e.target.value);
+    };
+    
+    const handleOriginUrlChange = (e) => {
+      SetOrigin(e.target.value);
+    };
+    
+    const handleIsCheckChange = (e) => {
+      setIsCheck(e.target.checked);
+    };  
+  
+    const handleAudioChange = (e) => {
+      SetUrl(e.target.checked);
+    };
 
+    const handleBookContentChange = (content) => {
+      setBookCont(content);
+    }
+
+    const handleFullBibleChange = (content) => {
+      SetFullBible(content);
+    };
+    
     const updateDoc = () => {
        console.log('updateDoc');
     }
-    const onChange = (e) => {
-      setContent(e.target.value);
-    };
     
     const cancel = () => {
         navigate(-1);  
@@ -93,19 +133,47 @@ const Form: React.FC = () => {
           <SubTitle>
             {/* {cates} */}
           </SubTitle>      
-          <BookContent>                
+          <SubjectArea>
+              <label htmlFor='title'>제목</label>
+              <p><input name="subject" type="text" placeholder="subject" value={subject || ''} onChange={handleSubjectChange} /></p>
+          </SubjectArea>     
+          <SubjectArea>
+              <label htmlFor='title'>URL</label>
+              <p><input name="url" type="text" placeholder="url"  value={url || ''} onChange={handleUrlChange} /></p>
+          </SubjectArea>    
+          <SubjectArea>
+              <label htmlFor='title'>원본 링크</label>
+              <p><input name="originUrl" type="text" placeholder="originUrl" value={originUrl || ''} onChange={handleOriginUrlChange} /></p>
+          </SubjectArea>                    
+          <SubjectArea>
+              <label htmlFor='title'>오디오 북 유무</label>
+              <p>
+                <MyCheck
+                  label="있음"
+                  value="isCheck"                  
+                  name={'isCheck'}
+                  checked={isCheck}
+                  onChange={handleIsCheckChange}                       
+                />                
+              </p>
+          </SubjectArea>  
+          <SubjectArea>
+              <label htmlFor='title'>오디오 링크</label>
+              <p><input name="url" type="text" placeholder="url" required value={url} onChange={handleAudioChange} /></p>
+          </SubjectArea>                         
+          <BookContent>    
             <TextAreaWrap>
                 <form onSubmit={ updateDoc }>              
                 <ReactQuill
-                  style={{ width: "100%", height: "550px" }}
+                  style={{ width: "100%", height: "550px", overflow: "auto" }}
                   placeholder=""
                   theme="snow"
                   ref={quillRef}
-                  value={ content }
-                  onChange={(content) => setContent({ ...content, content })}
+                  value={bookCont || ''}
+                  onChange={handleBookContentChange} // Pass the content directly
                   modules={modules}
-                />                     
-                    <ButtonArea>
+                />                   
+                  <ButtonArea>
                     <MyBtn
                         type="submit"                      
                         iconOnly={false}
@@ -122,7 +190,37 @@ const Form: React.FC = () => {
                     </ButtonArea>              
                 </form>
             </TextAreaWrap>
-          </BookContent>                    
+          </BookContent> 
+          <BookContent>    
+            <TextAreaWrap>
+                <form onSubmit={ updateDoc }>              
+                <ReactQuill
+                  style={{ width: "100%", height: "550px", overflow: "auto" }}
+                  placeholder=""
+                  theme="snow"
+                  ref={quillRef}
+                  value={fullBible || ''}
+                  onChange={handleFullBibleChange}
+                  modules={modules}
+                />                   
+                  <ButtonArea>
+                    <MyBtn
+                        type="submit"                      
+                        iconOnly={false}
+                        btnColor={'btn-primary'}
+                        btnSize={'medium'}
+                    >저장</MyBtn> 
+                    <MyBtn
+                        type="button"                      
+                        iconOnly={false}
+                        btnColor={'btn-secondary'}
+                        btnSize={'medium'}
+                        onClick={ cancel}
+                    >취소</MyBtn>                 
+                    </ButtonArea>              
+                </form>
+            </TextAreaWrap>
+          </BookContent>                               
         </div>
       )
 }
