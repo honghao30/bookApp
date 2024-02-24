@@ -4,6 +4,7 @@ import { Routes, Route, Navigate  } from 'react-router-dom'
 // 레이아웃
 import Intro from '../pages/Intro'
 import Form from '../books/Form'
+import ListForm from '../books/ListForm'
 import OnlyBodyLy from '../layout/onlyBodyLy';
 import BookMainLayout from '../layout/BookMainLayout';
 
@@ -29,7 +30,10 @@ function CommonRouter() {
           </Route>  
           <Route element={<OnlyBodyLy />}>          
             <Route path="/Form" element={<Form />} />                      
-          </Route>                                          
+          </Route> 
+          <Route element={<OnlyBodyLy />}>          
+            <Route path="/ListForm" element={<ListForm />} />                      
+          </Route>                                                    
       </Routes>
     )
   }

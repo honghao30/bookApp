@@ -1,8 +1,9 @@
 
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+
 // ui
 import { Button, Stack } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
 
 interface CateListProps {
     dataList: {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
 
@@ -39,11 +39,8 @@ const BookList: React.FC = () => {
     const [book, setBook] = useState(null);
     const { bookId } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const { cates, index, bookIds, realVoice, onlyAudio } = location.state;
-
-    const addPost = () => {
-      console.log('adding', dataList)
-    }    
 
     const getBookList = async () => {    
       await getDocs(collection(db, bookIds))
@@ -53,6 +50,15 @@ const BookList: React.FC = () => {
           setBook(newData);                   
       })     
     }
+
+    const addPost = () => {
+      const state = {        
+        index:  bookIds.length,        
+        bookIds: bookIds,    
+      };      
+      console.log('addPost', state)
+      navigate('/ListForm', { state });
+    } 
 
     useEffect(() => {
       getBookList()      
