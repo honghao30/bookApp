@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
 import BottomNav from "../layout/BottomNav"
@@ -58,6 +58,7 @@ const ReadCommon: React.FC = () => {
   const location = useLocation();
   const { bookId, cates, index, realVoice, onlyAudio } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const fabs = [
@@ -69,8 +70,7 @@ const ReadCommon: React.FC = () => {
     }
   ];
 
-  const getBookDetail = async () => {      
-    console.log('ㅇㅇ') 
+  const getBookDetail = async () => {          
     const docRef = doc(db, bookId, id);  
     console.log(docRef,bookId, id) 
     const docSnap = await getDoc(docRef);    
@@ -87,9 +87,20 @@ const ReadCommon: React.FC = () => {
     }    
   }
 
-  const editPost = () => {
-    console.log('수정')
-  }
+  const editPost = () => {    
+    const state = {   
+      id: id
+    };   
+  
+    if (realVoice) {
+      state.db = "originVoice";
+    } else {
+      state.bookId = bookId;
+    }
+  
+    console.log('수정', state);
+    navigate('/ReadForm', { state });
+  }  
 
   useEffect(() => {
     if (realVoice) {

@@ -5,8 +5,9 @@ import { Routes, Route, Navigate  } from 'react-router-dom'
 import Intro from '../pages/Intro'
 import Form from '../books/Form'
 import ListForm from '../books/ListForm'
-import OnlyBodyLy from '../layout/onlyBodyLy';
-import BookMainLayout from '../layout/BookMainLayout';
+import ReadForm from '../books/ReadForm'
+import OnlyBodyLy from '../layout/onlyBodyLy'
+import BookMainLayout from '../layout/BookMainLayout'
 
 // BOOK
 import BookMain from '../books/BookMain'
@@ -33,7 +34,10 @@ function CommonRouter() {
           </Route> 
           <Route element={<OnlyBodyLy />}>          
             <Route path="/ListForm" element={<ListForm />} />                      
-          </Route>                                                    
+          </Route>      
+          <Route element={<OnlyBodyLy />}>          
+            <Route path="/ReadForm" element={<ReadForm />} />                      
+          </Route>                                                           
       </Routes>
     )
   }

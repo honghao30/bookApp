@@ -107,9 +107,9 @@ const ReadNoteDetail: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  // const onChange = (e) => {
-  //   setNewNoteDetail(e.target.value);
-  // };  
+  const onChange = (e) => {
+    setNewNoteDetail(e.target.value);
+  };  
   const updateNote = async (e) => {    
     e.preventDefault();
     const dbRef = doc(db, `${noteDb}`, id)
@@ -128,7 +128,7 @@ const ReadNoteDetail: React.FC = () => {
       const docSnap = await getDoc(docRef);
     
       if (docSnap.exists()) {
-        setNoteDetail(docSnap.data())
+        // setNoteDetail(docSnap.data())
       }       
     };
     fetchNote();
