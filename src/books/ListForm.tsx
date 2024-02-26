@@ -150,7 +150,7 @@ const Form: React.FC = () => {
       try {
         const docRef = await addDoc(collection(db, callType), formData);
         console.log('Document written with ID: ', docRef);        
-        navigate('/BookMain');
+        navigate(-1); 
       } catch (e) {
         console.error('Error adding document: ', e);
       } 
