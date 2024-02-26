@@ -69,8 +69,10 @@ const ReadCommon: React.FC = () => {
     }
   ];
 
-  const getBookDetail = async () => {       
+  const getBookDetail = async () => {      
+    console.log('ㅇㅇ') 
     const docRef = doc(db, bookId, id);  
+    console.log(docRef,bookId, id) 
     const docSnap = await getDoc(docRef);    
     if (docSnap.exists()) {
       setBook(docSnap.data())

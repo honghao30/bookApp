@@ -76,26 +76,28 @@ const BookList: React.FC = () => {
           {cates}
         </SubTitle>
            <List>
-            {book.map((book: {
-              [x: string]: ReactNode; title: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined; 
-      }, index: Key | null | undefined) => (
+           {book
+            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            .map((book, index) => (
               <ListItem key={index}>
                 {onlyAudio ? (
                   <div>
-                  <iframe 
-                    src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
-                    title="오디오 플레이어" 
-                    width="100%" 
-                    height="100px">
-                </iframe>                   
-                </div>
+                    <iframe 
+                      src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
+                      title="오디오 플레이어" 
+                      width="100%" 
+                      height="100px"
+                    >
+                    </iframe>                   
+                  </div>
                 ) : (
                   <Link to={`/ReadCommon/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookIds }}>
                     {book.subject} {book.id} {book.url} {bookIds}
                   </Link>
-               )}
+                )}
               </ListItem>
-            ))}  
+            ))}
+
             <ButtonArea>
                 <Stack direction="row">          
                     <Button variant="outlined" onClick={ addPost }>등록</Button>                                               

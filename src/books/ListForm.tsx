@@ -80,15 +80,16 @@ const Form: React.FC = () => {
     const [originUrl, SetOrigin] = useState(null);
     const [fullBible, SetFullBible] = useState(null);    
     const [audioUrl, setAudioUrl] = useState(null);
+    const [book, setbook] = useState(null);
     const location = useLocation();
-    const { bookIds } = location.state || {};
+    const { bookIds, index } = location.state || {};
     const [callType, setCallType] = useState(bookIds);
     const quillRef = useRef()
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log('호출정보', callType, bookIds)
+        console.log('호출정보', callType, bookIds, index)
     }, []);
 
     const modules = useMemo(() => {
@@ -134,19 +135,20 @@ const Form: React.FC = () => {
       SetFullBible(content);
     };
     
-    const updateDoc = async (e) => {
-      e.preventDefault();       
+    const AddDoc = async (e) => {
+      e.preventDefault();             
       const formData = {   
         bookcate: callType,        
         write: writer,
         subject: subject, 
         originUrl: originUrl,         
-        bookCont: bookCont,
+        content: bookCont,
+        createdAt: Number(new Date()),
         fullBible: fullBible        
       };
       console.log('등록할 내용:', callType, formData);         
       try {
-        const docRef = await setDoc(doc(db, callType, `${index + 1}`), formData);
+        const docRef = await addDoc(collection(db, callType), formData);
         console.log('Document written with ID: ', docRef);        
         navigate('/BookMain');
       } catch (e) {
@@ -160,7 +162,7 @@ const Form: React.FC = () => {
 
     return (
         <div className='book-content'>
-          <form onSubmit={ updateDoc }>      
+          <form onSubmit={ AddDoc }>      
           <SubTitle>
             등록 화면
           </SubTitle>      

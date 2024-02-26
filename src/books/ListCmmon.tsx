@@ -45,19 +45,22 @@ const CateList: React.FC<CateListProps> = ({ dataList, userAdds, realVoice, only
 
   return (
     <List>
-      {dataList.map((book, index) => (
-        <ListItem key={index}>
-            {realVoice ? (
-              <Link to={`/ReadCommon/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
-                {book.subject}
-              </Link>
-            ) : (
-              <Link to={`/BookList/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
-                {book.subject}
-              </Link>
-            )} 
-        </ListItem>
-      ))} 
+      {dataList
+        .slice()
+        .sort((a, b) => a.id - b.id)
+        .map((book, index) => (
+          <ListItem key={index}>
+              {realVoice ? (
+                <Link to={`/ReadCommon/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
+                  {book.subject}
+                </Link>
+              ) : (
+                <Link to={`/BookList/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
+                  {book.subject}
+                </Link>
+              )} 
+          </ListItem>
+        ))}
       {
         userAdds &&
           <ButtonArea>
