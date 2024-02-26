@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
@@ -21,6 +21,11 @@ import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../src/firebase';
 
+//edit
+import "react-quill/dist/quill.snow.css"
+import ReactQuill from "react-quill"
+import { setDoc } from 'firebase/firestore/lite';
+
 const SubTitle = styled.p `
   font-size: 20px;
   font-weight: bold;
@@ -32,7 +37,40 @@ const BookContent = styled.div `
   font-size: 18px;
   line-height:28px;
   margin-bottom: 10px;
-  padding-bottom: 70px;
+  padding-bottom: 30px;
+`
+
+const TextAreaWrap = styled.div `
+  width: 100%;
+  max-width: 1280px;  
+  padding: 2px;
+  border: 1px solid #ddd;
+  margin: 20px auto;
+  textarea {
+    width: 100%;
+    height: 500px;
+    border: 0;
+    font-size: 16px;
+  }
+`
+const SubjectArea = styled.div `
+  width: 100%;
+  max-width: 1280px;  
+  padding: 2px;
+  font-weight: bold;
+  margin-bottom: 10px;  
+  label { 
+    display: block;
+    margin-bottom: 15px;  
+  }
+  input:not([type="checkbox"]) {
+    border: 1px solid #ddd;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    width: 100%;
+    text-indent: 10px;
+  }
 `
 const fabStyle = {
   position: 'fixed',
@@ -55,11 +93,37 @@ const ButtonArea = styled.div `
 const ReadCommon: React.FC = () => {  
   const [book, setBook] = useState(null);
   const [value, setValue] = useState(0);
+
+  const [url, SetUrl] = useState(null);  
+  const [originUrl, SetOrigin] = useState(null);
+  const [fullBible, SetFullBible] = useState(null);    
+  const [audioUrl, setAudioUrl] = useState(null);
+
   const location = useLocation();
   const { bookId, cates, index, realVoice, onlyAudio } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  
+  const quillRef = useRef()
+
+  const modules = useMemo(() => {
+    return {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, 4, 5, false] }],
+          ["bold", "italic", "underline", "strike"],
+          ["blockquote"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }, "link", "image"],
+        ],
+      },
+    }
+  }, [])
+
+  //수정
+  const [editMode, setEditMode] = useState(false);
 
   const fabs = [
     {
@@ -71,8 +135,7 @@ const ReadCommon: React.FC = () => {
   ];
 
   const getBookDetail = async () => {          
-    const docRef = doc(db, bookId, id);  
-    console.log(docRef,bookId, id) 
+    const docRef = doc(db, bookId, id);      
     const docSnap = await getDoc(docRef);    
     if (docSnap.exists()) {
       setBook(docSnap.data())
@@ -87,27 +150,24 @@ const ReadCommon: React.FC = () => {
     }    
   }
 
-  const editPost = () => {    
-    const state = {   
-      id: id
-    };   
+  const modifayUpdate = async () => {
+    try {
+      const dbRef = doc(db, bookId, id);
+      console.log('update', dbRef, id)    
   
-    if (realVoice) {
-      state.db = "originVoice";
-    } else {
-      state.bookId = bookId;
-    }
-  
-    console.log('수정', state);
-    navigate('/ReadForm', { state });
-  }  
+      // 수정 모드 종료
+      setEditMode(false);
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    }    
+  };
 
   useEffect(() => {
     if (realVoice) {
-        getFireData();
-      } else {
-        getBookDetail();
-      }    
+      getFireData();
+    } else {
+      getBookDetail();
+    }    
     window.addEventListener("scroll", () => {
       if (window.scrollY > 400) {
           setShowTopBtn(true);
@@ -148,25 +208,84 @@ const ReadCommon: React.FC = () => {
         ))}     
 
         {realVoice && book.url !== undefined && book.url !== '' && (
-        <div className='youtube-wrap'>
-            <iframe src={`https://www.youtube.com/embed/${book.url}`} title={book.subject}></iframe>
-        </div>
+          <>
+            {editMode ? (
+              <SubjectArea>
+                  <label htmlFor='title'>URL</label>
+                  <p><input name="url" type="text" placeholder="url"  value={book.url} 
+                  onChange={(e) => SetUrl({...book, url: e.target.value })}                   
+                  /></p>
+              </SubjectArea>                
+              ) : (
+                <div className='youtube-wrap'>
+                    <iframe src={`https://www.youtube.com/embed/${book.url}`} title={book.subject}></iframe>
+                </div>                
+            )}
+          </>
         )}
 
         {!realVoice && book.url !== undefined && book.url !== '' && (
-        <AudioSection>
-            <iframe src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} title="오디오 플레이어" width="100%" height="60px"></iframe>
-        </AudioSection>
+          <>
+            {editMode ? (
+              <SubjectArea>
+                  <label htmlFor='title'>오디오 링크</label>
+                  <p>
+                  <input 
+                      name="audioUrl" 
+                      type="text" 
+                      placeholder="url" 
+                      value={book.url || ''} 
+                      onChange={(e) => setBook({ ...book, url: e.target.value })} 
+                  />
+                  </p>
+              </SubjectArea>              
+            ) : (
+              <AudioSection>
+                <iframe src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} title="오디오 플레이어" width="100%" height="60px"></iframe>
+              </AudioSection>
+            )}
+          </>
         )}
-       <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />  
-       <ButtonArea>
+
+        {editMode ? (
+          <BookContent>
+            <TextAreaWrap>                
+              <ReactQuill
+                style={{ width: "100%", height: "550px", overflow: "auto" }}
+                placeholder=""
+                theme="snow"
+                ref={quillRef}
+                value={book.content || ''}
+                onChange={(content) => setBook({ ...book, content })}
+                modules={modules}
+              />                            
+            </TextAreaWrap>            
+          </BookContent>
+        ) : (
+          <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />
+        )}
+
+        {!editMode && (
+          <ButtonArea>
+            <Stack direction="row">          
+              <Button variant="outlined" onClick={() => setEditMode(true)}>수정</Button>                                               
+            </Stack>
+          </ButtonArea>
+        )}
+        <ButtonArea>
           <Stack direction="row">          
-            <Button variant="outlined" onClick={ editPost }>수정</Button>                                               
+            {editMode && (
+              <>
+                <Button variant="outlined" onClick={ modifayUpdate }>저장</Button>
+                <Button variant="outlined" onClick={() => setEditMode(false)}>취소</Button>              
+              </>
+            )}
           </Stack>
         </ButtonArea>            
       </div>   
       <BottomNav />  
-    </> 
+    </>
+
   )
 }
 
