@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+
+//ui
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useNavigate } from 'react-router-dom';
 import { Drawer } from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -19,6 +21,8 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const BottomNav: React.FC = () => {
   const [value, setValue] = useState('recents');
@@ -74,11 +78,24 @@ const BottomNav: React.FC = () => {
           icon={<TravelExploreIcon />}
           onClick={ alertMsg }
         />
-        {/* <BottomNavigationAction
+        <BottomNavigationAction
           label="오디오"
           value="오디오"
           icon={<VolumeUpIcon />}
-        /> */}
+          onClick={ alertMsg }
+        />
+        <BottomNavigationAction
+          label="이전"
+          value="이전"
+          icon={<ArrowBackIosNewIcon />}
+          onClick={ alertMsg }
+        />
+        <BottomNavigationAction
+          label="다음"
+          value="다음"
+          icon={<ArrowForwardIosIcon />}
+          onClick={ alertMsg }
+        />                
       {/* <BottomNavigationAction
           label="절기"
           value="절기"

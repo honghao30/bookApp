@@ -93,8 +93,8 @@ const BookList: React.FC = () => {
                     </iframe>                   
                   </div>
                 ) : (
-                  <Link to={`/ReadCommon/${book.id}`}  state={{ cates: book.subject, index: index, bookId: bookIds }}>
-                    {book.subject} {book.id} {book.url} {bookIds}
+                  <Link to={`/ReadCommon/${book.id}`}  state={{ cates: cates, bookCates: book.subject, index: index, bookId: bookIds }}>
+                    {book.subject} {book.id} {book.url} {bookIds}{cates}
                   </Link>
                 )}
               </ListItem>

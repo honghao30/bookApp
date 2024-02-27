@@ -90,3 +90,11 @@ body {
     height: 100%;
   }
 }
+
+.bookName {
+  @include fontoption(18px,#fff, 400, 20px);
+}
+.bookCates {
+  @include fontoption(14px,#fff, 400, 15px);
+  margin-top: 5px;
+}

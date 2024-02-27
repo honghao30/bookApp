@@ -4,7 +4,7 @@ import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
 import BottomNav from "../layout/BottomNav"
-// import TopUtilDetail from "../layout/TopUtilDetail"
+import TopUtilDetail from "../layout/TopUtilDetail"
 
 // ui
 import Fab from '@mui/material/Fab';
@@ -26,7 +26,7 @@ import "react-quill/dist/quill.snow.css"
 import ReactQuill from "react-quill"
 import { setDoc } from 'firebase/firestore/lite';
 
-const SubTitle = styled.p `
+const SubTitle = styled.div `
   font-size: 20px;
   font-weight: bold;
   border-bottom: 1px solid #ddd;
@@ -100,7 +100,7 @@ const ReadCommon: React.FC = () => {
   const [audioUrl, setAudioUrl] = useState(null);
 
   const location = useLocation();
-  const { bookId, cates, index, realVoice, onlyAudio } = location.state;
+  const { cates, bookId, bookCates, index, realVoice, onlyAudio } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -192,9 +192,10 @@ const ReadCommon: React.FC = () => {
 
   return (
     <>      
+      <TopUtilDetail cates={cates} bookCates={bookCates} />
       <div className='book-content'>
         <SubTitle>
-          {cates}
+          {bookCates}
         </SubTitle>
         {showTopBtn && fabs.map((fab, index) => (
           <Zoom
