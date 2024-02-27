@@ -95,10 +95,10 @@ const ReadCommon: React.FC = () => {
   const [value, setValue] = useState(0);
 
   const [url, SetUrl] = useState(null);  
-  const [originUrl, SetOrigin] = useState(null);
-  const [fullBible, SetFullBible] = useState(null);    
+  const [originUrl, SetOrigin] = useState(null);  
+  const [fullBible, setFullBible] = useState(null);    
   const [audioUrl, setAudioUrl] = useState(null);
-
+  const [showAddBible, setShowAddBible] = useState(Boolean);
   const location = useLocation();
   const { cates, bookId, bookCates, index, realVoice, onlyAudio } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -162,6 +162,14 @@ const ReadCommon: React.FC = () => {
       console.error('Error updating document: ', error);
     }    
   };
+
+  const handleBookContentChange = (content: React.SetStateAction<null>) => {
+    setFullBible(content);
+  }
+
+  const bibleAdd = async () => {
+    console.log('ddd')
+  }
 
   useEffect(() => {
     if (realVoice) {
@@ -275,7 +283,7 @@ const ReadCommon: React.FC = () => {
                   {showBible ? '성경구절 감추기' : '성경구절 보기'}
                 </Button>         
               }     
-              {/* <Button variant="outlined" onClick={() => setEditMode(true)}>성경구절 등록</Button>     */}
+              <Button variant="outlined" onClick={() => setShowAddBible(prev => !prev)}>성경구절 등록</Button>    
               <Button variant="outlined" onClick={() => setEditMode(true)}>수정</Button>                                               
             </Stack>
           </ButtonArea>
@@ -291,6 +299,29 @@ const ReadCommon: React.FC = () => {
           </Stack>
         </ButtonArea>  
         {showBible && <BookContent dangerouslySetInnerHTML={{ __html: book.fullBible }} /> }
+        {fullBible &&
+          <form>
+          <BookContent>
+              <TextAreaWrap>                
+                <ReactQuill
+                  style={{ width: "100%", height: "550px", overflow: "auto" }}
+                  placeholder=""
+                  theme="snow"
+                  ref={quillRef}
+                  value={fullBible || ''}
+                  onChange={handleBookContentChange} // Pass the content directly
+                  modules={modules}
+                />                            
+              </TextAreaWrap>          
+          </BookContent>
+          <ButtonArea>
+            <Stack direction="row"> 
+                  <Button variant="outlined" onClick={ bibleAdd }>저장</Button>
+                  <Button variant="outlined" onClick={() => setShowAddBible(prev => !prev)}>취소</Button>  
+            </Stack>
+        </ButtonArea> 
+          </form>
+        }
       </div>   
       <BottomNav />  
     </>

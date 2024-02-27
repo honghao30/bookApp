@@ -77,8 +77,7 @@ const Form: React.FC = () => {
     const [subject, setSubject] = useState(null);
     const [url, SetUrl] = useState(null);
     const [isCheck, setIsCheck] = useState(false);
-    const [originUrl, SetOrigin] = useState(null);
-    const [fullBible, SetFullBible] = useState(null);    
+    const [originUrl, SetOrigin] = useState(null);    
     const [audioUrl, setAudioUrl] = useState(null);
     const [book, setbook] = useState(null);
     const location = useLocation();
@@ -131,10 +130,6 @@ const Form: React.FC = () => {
       setBookCont(content);
     }
 
-    const handleFullBibleChange = (content: React.SetStateAction<null>) => {
-      SetFullBible(content);
-    };
-    
     const AddDoc = async (e) => {
       e.preventDefault();             
       const formData = {   
@@ -218,21 +213,6 @@ const Form: React.FC = () => {
               </TextAreaWrap>
             </BookContent> 
           }
-          {fullBible &&
-          <BookContent>    
-            <TextAreaWrap>                        
-                <ReactQuill
-                  style={{ width: "100%", height: "550px", overflow: "auto" }}
-                  placeholder=""
-                  theme="snow"
-                  ref={quillRef}
-                  value={fullBible || ''}
-                  onChange={handleFullBibleChange}
-                  modules={modules}
-                /> 
-            </TextAreaWrap>
-          </BookContent>    
-          } 
               <ButtonArea>
                 <MyBtn
                     type="submit"                      
