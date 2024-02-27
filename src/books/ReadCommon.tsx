@@ -102,6 +102,7 @@ const ReadCommon: React.FC = () => {
   const location = useLocation();
   const { cates, bookId, bookCates, index, realVoice, onlyAudio } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const [showBible, setShowBible] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   
@@ -268,7 +269,13 @@ const ReadCommon: React.FC = () => {
 
         {!editMode && (
           <ButtonArea>
-            <Stack direction="row">          
+            <Stack direction="row">  
+              {book.fullBible &&          
+                <Button variant="outlined" onClick={() => setShowBible(prev => !prev)}>
+                  {showBible ? '성경구절 감추기' : '성경구절 보기'}
+                </Button>         
+              }     
+              {/* <Button variant="outlined" onClick={() => setEditMode(true)}>성경구절 등록</Button>     */}
               <Button variant="outlined" onClick={() => setEditMode(true)}>수정</Button>                                               
             </Stack>
           </ButtonArea>
@@ -282,7 +289,8 @@ const ReadCommon: React.FC = () => {
               </>
             )}
           </Stack>
-        </ButtonArea>            
+        </ButtonArea>  
+        {showBible && <BookContent dangerouslySetInnerHTML={{ __html: book.fullBible }} /> }
       </div>   
       <BottomNav />  
     </>
