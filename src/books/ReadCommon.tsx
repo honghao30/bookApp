@@ -17,7 +17,7 @@ import { Button, Stack } from '@mui/material';
 
 // fire base
 import { db } from '../../src/firebase';
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../src/firebase';
 
@@ -154,9 +154,8 @@ const ReadCommon: React.FC = () => {
   const modifayUpdate = async () => {
     try {
       const dbRef = doc(db, bookId, id);
-      console.log('update', dbRef, id)    
-  
-      // 수정 모드 종료
+      console.log('update', dbRef, id, book)    
+      await updateDoc(dbRef, book);
       setEditMode(false);
     } catch (error) {
       console.error('Error updating document: ', error);
