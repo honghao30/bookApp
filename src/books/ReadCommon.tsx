@@ -100,7 +100,7 @@ const ReadCommon: React.FC = () => {
   const [audioUrl, setAudioUrl] = useState(null);
   const [showAddBible, setShowAddBible] = useState(Boolean);
   const location = useLocation();
-  const { cates, bookId, bookCates, index, realVoice, onlyAudio } = location.state;
+  const { cates, bookId, bookCates, index, realVoice, onlyAudio, hasBible } = location.state;
   const [showTopBtn, setShowTopBtn] = useState(false);
   const [showBible, setShowBible] = useState(false);
   const navigate = useNavigate();
@@ -163,15 +163,8 @@ const ReadCommon: React.FC = () => {
     }    
   };
 
-  const handleBookContentChange = (content: React.SetStateAction<null>) => {
-    setFullBible(content);
-  }
-
-  const bibleAdd = async () => {
-    console.log('ddd')
-  }
-
   useEffect(() => {
+    console.log(hasBible)
     if (realVoice) {
       getFireData();
     } else {
@@ -275,6 +268,24 @@ const ReadCommon: React.FC = () => {
           <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />
         )}
 
+        {editMode ? (
+          <BookContent>
+            <TextAreaWrap>                
+              <ReactQuill
+                style={{ width: "100%", height: "550px", overflow: "auto" }}
+                placeholder=""
+                theme="snow"
+                ref={quillRef}
+                value={book.fullBible || ''}
+                onChange={(fullBible) => setBook({ ...book, fullBible })}                
+                modules={modules}
+              />                            
+            </TextAreaWrap>          
+          </BookContent>          
+        ) : (
+          showBible && <BookContent dangerouslySetInnerHTML={{ __html: book.fullBible }} />
+        )}
+
         {!editMode && (
           <ButtonArea>
             <Stack direction="row">  
@@ -282,8 +293,7 @@ const ReadCommon: React.FC = () => {
                 <Button variant="outlined" onClick={() => setShowBible(prev => !prev)}>
                   {showBible ? '성경구절 감추기' : '성경구절 보기'}
                 </Button>         
-              }     
-              <Button variant="outlined" onClick={() => setShowAddBible(prev => !prev)}>성경구절 등록</Button>    
+              }                   
               <Button variant="outlined" onClick={() => setEditMode(true)}>수정</Button>                                               
             </Stack>
           </ButtonArea>
@@ -297,31 +307,7 @@ const ReadCommon: React.FC = () => {
               </>
             )}
           </Stack>
-        </ButtonArea>  
-        {showBible && <BookContent dangerouslySetInnerHTML={{ __html: book.fullBible }} /> }
-        {fullBible &&
-          <form>
-          <BookContent>
-              <TextAreaWrap>                
-                <ReactQuill
-                  style={{ width: "100%", height: "550px", overflow: "auto" }}
-                  placeholder=""
-                  theme="snow"
-                  ref={quillRef}
-                  value={fullBible || ''}
-                  onChange={handleBookContentChange} // Pass the content directly
-                  modules={modules}
-                />                            
-              </TextAreaWrap>          
-          </BookContent>
-          <ButtonArea>
-            <Stack direction="row"> 
-                  <Button variant="outlined" onClick={ bibleAdd }>저장</Button>
-                  <Button variant="outlined" onClick={() => setShowAddBible(prev => !prev)}>취소</Button>  
-            </Stack>
-        </ButtonArea> 
-          </form>
-        }
+        </ButtonArea>        
       </div>   
       <BottomNav />  
     </>

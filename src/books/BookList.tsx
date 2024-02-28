@@ -6,11 +6,7 @@ import Loading from './compornents/Loading';
 
 // fire base
 import { db } from '../../src/firebase';
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { authService } from '../../src/firebase';
-
-//ui
+import { collection, getDocs } from "firebase/firestore";
 import { Button, Stack } from '@mui/material';
 
 const List = styled.ul `
@@ -38,29 +34,17 @@ const ButtonArea = styled.div `
   }
 `
 const BookList: React.FC = () => {  
-    const [book, setBook] = useState(null);
+    const [book, setBook] = useState([]);
     const { bookId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-    const { cates, index, bookIds, realVoice, onlyAudio } = location.state;
+    const { cates, index, bookIds, realVoice, onlyAudio, hasBible } = location.state;
 
     const getBookList = async () => {    
-      await getDocs(collection(db, bookIds))
-      .then((querySnapshot)=>{               
-          const newData = querySnapshot.docs
-          .map((doc) => ({...doc.data(), id:doc.id }));
-          setBook(newData);                   
-      })     
+      const querySnapshot = await getDocs(collection(db, bookIds));
+      const newData = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id }));
+      setBook(newData);                   
     }
-
-    const addPost = () => {
-      const state = {        
-        index:  bookIds.length,        
-        bookIds: bookIds,    
-      };      
-      console.log('addPost', state)
-      navigate('/ListForm', { state });
-    } 
 
     useEffect(() => {
       getBookList()      
@@ -93,8 +77,8 @@ const BookList: React.FC = () => {
                     </iframe>                   
                   </div>
                 ) : (
-                  <Link to={`/ReadCommon/${book.id}`}  state={{ cates: cates, bookCates: book.subject, index: index, bookId: bookIds }}>
-                    {book.subject} {book.id} {book.url} {bookIds}{cates}
+                  <Link to={`/ReadCommon/${book.id}`}  state={{ cates: cates, bookCates: book.subject, index: index, bookId: bookIds, hasBible }}>
+                    {book.subject}
                   </Link>
                 )}
               </ListItem>

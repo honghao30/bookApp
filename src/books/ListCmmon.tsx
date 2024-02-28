@@ -14,6 +14,7 @@ interface CateListProps {
     realVoice: boolean;
     onlyAudio: boolean; 
     userAdds: boolean;   
+    hasBible: boolean;
 }
 const ButtonArea = styled.div `
   margin: 20px 0;
@@ -32,7 +33,7 @@ const ListItem = styled.li `
 font-size: 15px;
 padding: 6px 0;
 `
-const CateList: React.FC<CateListProps> = ({ dataList, userAdds, realVoice, onlyAudio }) => {
+const CateList: React.FC<CateListProps> = ({ dataList, userAdds, realVoice, onlyAudio, hasBible }) => {
   const navigate = useNavigate();
 
   const addPost = () => {
@@ -51,11 +52,11 @@ const CateList: React.FC<CateListProps> = ({ dataList, userAdds, realVoice, only
         .map((book, index) => (
           <ListItem key={index}>
               {realVoice ? (
-                <Link to={`/ReadCommon/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
+                <Link to={`/ReadCommon/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio, hasBible }}>
                   {book.subject}
                 </Link>
               ) : (
-                <Link to={`/BookList/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio }}>
+                <Link to={`/BookList/${book.id}`} state={{ cates: book.subject, index: index, bookIds: book.bookId, realVoice, onlyAudio, hasBible }}>
                   {book.subject}
                 </Link>
               )} 
