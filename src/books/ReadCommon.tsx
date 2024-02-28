@@ -14,6 +14,7 @@ import Zoom from '@mui/material/Zoom';
 import { green } from '@mui/material/colors';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Button, Stack } from '@mui/material';
+import Divider from '@mui/material/Divider';
 
 // fire base
 import { db } from '../../src/firebase';
@@ -25,6 +26,16 @@ import { authService } from '../../src/firebase';
 import "react-quill/dist/quill.snow.css"
 import ReactQuill from "react-quill"
 import { setDoc } from 'firebase/firestore/lite';
+
+const style = {
+  py: 0,
+  width: '100%',
+  maxWidth: 360,
+  borderRadius: 2,
+  border: '1px solid',
+  borderColor: 'divider',
+  backgroundColor: 'background.paper',
+}
 
 const SubTitle = styled.div `
   font-size: 20px;
@@ -263,12 +274,12 @@ const ReadCommon: React.FC = () => {
               />                            
             </TextAreaWrap>            
           </BookContent>
-        ) : (
-          <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />
+        ) : (                      
+            <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />          
         )}
 
         {editMode ? (
-          <BookContent>
+          <BookContent>            
             <TextAreaWrap>                
               <ReactQuill
                 style={{ width: "100%", height: "550px", overflow: "auto" }}
