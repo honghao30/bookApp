@@ -6,7 +6,11 @@ import Loading from './compornents/Loading';
 
 // fire base
 import { db } from '../../src/firebase';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { authService } from '../../src/firebase';
+
+//ui
 import { Button, Stack } from '@mui/material';
 
 const List = styled.ul `
@@ -34,17 +38,29 @@ const ButtonArea = styled.div `
   }
 `
 const BookList: React.FC = () => {  
-    const [book, setBook] = useState([]);
+    const [book, setBook] = useState(null);
     const { bookId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
     const { cates, index, bookIds, realVoice, onlyAudio, hasBible } = location.state;
 
     const getBookList = async () => {    
-      const querySnapshot = await getDocs(collection(db, bookIds));
-      const newData = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id }));
-      setBook(newData);                   
+      await getDocs(collection(db, bookIds))
+      .then((querySnapshot)=>{               
+          const newData = querySnapshot.docs
+          .map((doc) => ({...doc.data(), id:doc.id }));
+          setBook(newData);                   
+      })     
     }
+
+    const addPost = () => {
+      const state = {        
+        index:  bookIds.length,        
+        bookIds: bookIds,    
+      };      
+      console.log('addPost', state)
+      navigate('/ListForm', { state });
+    } 
 
     useEffect(() => {
       getBookList()      

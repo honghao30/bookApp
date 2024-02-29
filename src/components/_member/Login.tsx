@@ -11,11 +11,12 @@ import Button from '@mui/material/Button';
 // fire base
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../../src/firebase';
+import { useSetRecoilState } from 'recoil';
+import { authState } from '../../recoil/authAtom';
 
 const LoginForm: React.FC  = () => {  
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');    
     const [newAccount, setNewAccount] = useState(true);
+    const setAuth = useSetRecoilState(authState);
     const [error, setError] = useState('');
     // const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [open, setOpen] = useState(false)
@@ -44,23 +45,16 @@ const LoginForm: React.FC  = () => {
     const login = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();          
         try {
-            await signInWithEmailAndPassword(authService, fields.email, fields.password);  
+            let auth;
+            auth = await signInWithEmailAndPassword(authService, fields.email, fields.password); 
+            if (auth.user) {
+              setAuth(auth.user);              
+            }            
             navigate('/BookMain');          
         } catch (e) {
             return e.message.replace("Firebase: Error ", "");
         }
     }
-
-    // useEffect(() => {
-    //     authService.onAuthStateChanged((user) => {
-    //       console.log(user);
-    //       if (user) {            
-    //         navigate('/BookMain');
-    //       } else {
-    //         navigate('/Intro');            
-    //       }
-    //     });
-    // }, []);
 
     return (
         <div className="login__form">
