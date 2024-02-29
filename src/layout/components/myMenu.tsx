@@ -26,7 +26,7 @@ const MyMenuList: React.FC = () => {
     };
 
     const goMypage = () => {
-      alert('준비중입니다.')
+      navigate('/MyPage');     
       setAnchorEl(null);
     }
 
@@ -76,8 +76,7 @@ const MyMenuList: React.FC = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={ goMypage }>Profile</MenuItem>
-          <MenuItem onClick={ goMypage }>Profile Modify</MenuItem>
+          <MenuItem onClick={ goMypage }>Profile</MenuItem>          
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
   </div>    
