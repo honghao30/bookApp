@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Loading from './compornents/Loading';
 import BottomNav from "../layout/BottomNav"
 import TopUtilDetail from "../layout/TopUtilDetail"
+import GotoTop from './compornents/scrollTop';
 
 // ui
 import Fab from '@mui/material/Fab';
@@ -103,8 +104,6 @@ const ButtonArea = styled.div `
 `
 const ReadCommon: React.FC = () => {  
   const [book, setBook] = useState(null);
-  const [value, setValue] = useState(0);
-
   const [url, SetUrl] = useState(null);  
   const [originUrl, SetOrigin] = useState(null);  
   const [fullBible, setFullBible] = useState(null);    
@@ -137,15 +136,6 @@ const ReadCommon: React.FC = () => {
   //수정
   const [editMode, setEditMode] = useState(false);
 
-  const fabs = [
-    {
-      color: 'primary' as 'primary',
-      sx: fabStyle as SxProps,
-      icon: <KeyboardArrowUpIcon />,
-      label: '위로',
-    }
-  ];
-
   const getBookDetail = async () => {          
     const docRef = doc(db, bookId, id);      
     const docSnap = await getDoc(docRef);    
@@ -163,14 +153,25 @@ const ReadCommon: React.FC = () => {
   }
 
   const modifayUpdate = async () => {
-    try {
-      const dbRef = doc(db, bookId, id);
-      console.log('update', dbRef, id, book)    
-      await updateDoc(dbRef, book);
-      setEditMode(false);
-    } catch (error) {
-      console.error('Error updating document: ', error);
-    }    
+    console.log(realVoice, bookId, id)
+    if(!realVoice) {
+      try {
+        const dbRef = doc(db, bookId, id);        
+        await updateDoc(dbRef, book);
+        setEditMode(false);
+      } catch (error) {
+        console.error('Error updating document: ', error);
+      }   
+    } else {
+      try {
+        const dbRef = doc(db, "originVoice", id);
+        console.log('update', dbRef, id, book)    
+        await updateDoc(dbRef, book);
+        setEditMode(false);
+      } catch (error) {
+        console.error('Error updating document: ', error);
+      }         
+    }
   };
 
   useEffect(() => {
@@ -189,13 +190,6 @@ const ReadCommon: React.FC = () => {
   });     
   }, []);
 
-  const goToTop = () => {
-      window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-      });
-  };
-
   if (!book) {
     return <div>
           <Loading />
@@ -209,16 +203,9 @@ const ReadCommon: React.FC = () => {
         <SubTitle>
           {bookCates}
         </SubTitle>
-        {showTopBtn && fabs.map((fab, index) => (
-          <Zoom
-            key={fab.color}
-            in={value === index}
-          >
-            <Fab sx={fab.sx} aria-label={fab.label} color={fab.color} size="medium" onClick={goToTop}>
-              {fab.icon}
-            </Fab>
-          </Zoom>
-        ))}     
+        {showTopBtn &&
+          <GotoTop />
+        }     
 
         {realVoice && book.url !== undefined && book.url !== '' && (
           <>
@@ -278,7 +265,7 @@ const ReadCommon: React.FC = () => {
             <BookContent dangerouslySetInnerHTML={{ __html: book.content }} />          
         )}
 
-        {editMode ? (
+        {editMode && hasBible ? (
           <BookContent>            
             <TextAreaWrap>                
               <ReactQuill
