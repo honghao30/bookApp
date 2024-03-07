@@ -4,19 +4,21 @@ const useScrollDirection = () => {
   const [scrollDirection, setScrollDirection] = useState(null);
   const [prevScrollPosition, setPrevScrollPosition] = useState(0);
   const [showGotoTop, setShowGotoTop] = useState(false);
+  const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPosition = window.pageYOffset;
-      if (currentScrollPosition > prevScrollPosition) {
+      const newScrollPosition = window.pageYOffset;
+      if (newScrollPosition > prevScrollPosition) {
         setScrollDirection('down');
       } else {
         setScrollDirection('up');
       }
-      // 스크롤 위치에 따라 gotoTop 버튼의 가시성 제어
-      setShowGotoTop(currentScrollPosition > 400);
+      setShowGotoTop(newScrollPosition > 400);
 
-      setPrevScrollPosition(currentScrollPosition);
+      setCurrentScrollPosition(newScrollPosition);
+      setPrevScrollPosition(newScrollPosition);    
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -25,7 +27,7 @@ const useScrollDirection = () => {
     };
   }, [prevScrollPosition]);
 
-  return { scrollDirection, showGotoTop }; // 수정된 반환 값
+  return { scrollDirection, showGotoTop, currentScrollPosition };
 };
 
 export default useScrollDirection;

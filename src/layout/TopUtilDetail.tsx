@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import BookSubCate from '../books/compornents/bookListLayer';
 
 //UI
 import AppBar from '@mui/material/AppBar';
@@ -17,9 +18,15 @@ import { useEffect, useState } from 'react';
 
 const TopUtilDetail: React.FC<{ cates: string, bookCates:string }> = ({ cates, bookCates }) => {  
   const navigate = useNavigate();
+  const [openList, setOpenList] = useState(false);
+
   const handleMenuClick = () => {
     console.log('책 목록 열기')
+    setOpenList(!openList);
   };
+  const handleClose = () => {
+    setOpenList(false);
+  }
   const handleFaveClick = () => {
     alert('준비중')
     console.log('즐겨찾기 추가')
@@ -54,6 +61,7 @@ const TopUtilDetail: React.FC<{ cates: string, bookCates:string }> = ({ cates, b
             </IconButton>                 
         </Toolbar>
       </AppBar>
+      {openList && <BookSubCate handleClose={handleClose} />}
     </Box>
   );
 };

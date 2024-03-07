@@ -85,6 +85,11 @@ const SubjectArea = styled.div `
     text-indent: 10px;
   }
 `
+const BookContentDv = styled.div `
+  height: 100%;
+  padding: 70px 16px 16px;    
+`
+
 const fabStyle = {
   position: 'fixed',
   bottom: 56,
@@ -116,8 +121,9 @@ const ReadCommon: React.FC = () => {
   const [showBible, setShowBible] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { scrollDirection, showGotoTop } = useScrollDirection();
-  
+  const { scrollDirection, showGotoTop, currentScrollPosition } = useScrollDirection();
+  const [initialLoad, setInitialLoad] = useState(true);
+
   const quillRef = useRef()
 
   const modules = useMemo(() => {
@@ -182,7 +188,8 @@ const ReadCommon: React.FC = () => {
       getFireData();
     } else {
       getBookDetail();
-    }       
+    }     
+    setInitialLoad(false);  
   }, []);
 
   if (!book) {
@@ -193,10 +200,10 @@ const ReadCommon: React.FC = () => {
 
   return (
     <>  
-      {scrollDirection==='up' &&    
+      {scrollDirection !== 'down' && currentScrollPosition <= 200 && (
         <TopUtilDetail cates={cates} bookCates={bookCates} />
-      }
-      <div className='book-content'>
+      )}
+      <BookContentDv>      
         <SubTitle>
           {bookCates}Scroll Direction: {scrollDirection}
         </SubTitle>
@@ -302,8 +309,8 @@ const ReadCommon: React.FC = () => {
             )}
           </Stack>
         </ButtonArea>        
-      </div>   
-      {scrollDirection==='up' && <BottomNav />  }
+      </BookContentDv>  
+      {scrollDirection !== 'down' && currentScrollPosition <= 200 && <BottomNav />  }
     </>
 
   )
