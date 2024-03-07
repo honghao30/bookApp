@@ -6,6 +6,7 @@ import Loading from './compornents/Loading';
 import BottomNav from "../layout/BottomNav"
 import TopUtilDetail from "../layout/TopUtilDetail"
 import GotoTop from './compornents/scrollTop';
+import useScrollDirection from '../hook/scrollHook';
 
 // ui
 import Fab from '@mui/material/Fab';
@@ -115,6 +116,7 @@ const ReadCommon: React.FC = () => {
   const [showBible, setShowBible] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { scrollDirection, showGotoTop } = useScrollDirection();
   
   const quillRef = useRef()
 
@@ -180,14 +182,7 @@ const ReadCommon: React.FC = () => {
       getFireData();
     } else {
       getBookDetail();
-    }    
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 400) {
-          setShowTopBtn(true);
-      } else {
-          setShowTopBtn(false);
-      }
-  });     
+    }       
   }, []);
 
   if (!book) {
@@ -197,15 +192,17 @@ const ReadCommon: React.FC = () => {
   }
 
   return (
-    <>      
-      <TopUtilDetail cates={cates} bookCates={bookCates} />
+    <>  
+      {scrollDirection==='up' &&    
+        <TopUtilDetail cates={cates} bookCates={bookCates} />
+      }
       <div className='book-content'>
         <SubTitle>
-          {bookCates}
+          {bookCates}Scroll Direction: {scrollDirection}
         </SubTitle>
-        {showTopBtn &&
+        {showGotoTop &&
           <GotoTop />
-        }     
+        } 
 
         {realVoice && book.url !== undefined && book.url !== '' && (
           <>
@@ -306,7 +303,7 @@ const ReadCommon: React.FC = () => {
           </Stack>
         </ButtonArea>        
       </div>   
-      <BottomNav />  
+      {scrollDirection==='up' && <BottomNav />  }
     </>
 
   )
