@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
+import BookListItem from './compornents/BookListItem';
 
 // fire base
 import { db } from '../../src/firebase';
@@ -77,35 +78,35 @@ const BookList: React.FC = () => {
         <SubTitle>
           {cates}
         </SubTitle>
-           <List>
-           {book
-            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-            .map((book, index) => (
-              <ListItem key={index}>
-                {onlyAudio ? (
-                  <div>
-                    <iframe 
-                      src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
-                      title="오디오 플레이어" 
-                      width="100%" 
-                      height="100px"
-                    >
-                    </iframe>                   
-                  </div>
-                ) : (
-                  <Link to={`/ReadCommon/${book.id}`}  state={{ cates: cates, bookCates: book.subject, index: index, bookId: bookIds, hasBible }}>
-                    {book.subject}
-                  </Link>
-                )}
-              </ListItem>
-            ))}
+        <List>
+          {book
+          .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+          .map((book, index) => (
+            <ListItem key={index}>
+              {onlyAudio ? (
+                <div>
+                  <iframe 
+                    src={`https://player.audiop.naver.com/player?cpId=audioclip&cpMetaId=${book.url}&partnerKey=f8ae3b53&partnerId=audioclip&extra=`} 
+                    title="오디오 플레이어" 
+                    width="100%" 
+                    height="100px"
+                  >
+                  </iframe>                   
+                </div>
+              ) : (
+                <Link to={`/ReadCommon/${book.id}`}  state={{ cates: cates, bookCates: book.subject, index: index, bookId: bookIds, hasBible }}>
+                  {book.subject}
+                </Link>
+              )}
+            </ListItem>
+          ))}
 
-            <ButtonArea>
-                <Stack direction="row">          
-                    <Button variant="outlined" onClick={ addPost }>등록</Button>                                               
-                </Stack>
-            </ButtonArea>                         
-          </List>
+          <ButtonArea>
+              <Stack direction="row">          
+                  <Button variant="outlined" onClick={ addPost }>등록</Button>                                               
+              </Stack>
+          </ButtonArea>                         
+        </List>
       </div>
     )
 }
