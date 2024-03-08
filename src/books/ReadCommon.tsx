@@ -121,8 +121,7 @@ const ReadCommon: React.FC = () => {
   const [showBible, setShowBible] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { scrollDirection, showGotoTop, currentScrollPosition } = useScrollDirection();
-  const [initialLoad, setInitialLoad] = useState(true);
+  const { scrollDirection, showGotoTop, currentScrollPosition } = useScrollDirection();  
 
   const quillRef = useRef()
 
@@ -188,8 +187,7 @@ const ReadCommon: React.FC = () => {
       getFireData();
     } else {
       getBookDetail();
-    }     
-    setInitialLoad(false);  
+    }
   }, []);
 
   if (!book) {
@@ -319,7 +317,9 @@ const ReadCommon: React.FC = () => {
           </Stack>
         </ButtonArea>        
       </BookContentDv>  
-      {scrollDirection !== 'down' && currentScrollPosition <= 200 && <BottomNav />  }
+      {scrollDirection !== 'down' && currentScrollPosition <= 200 && <BottomNav 
+        onlyAudio={onlyAudio}
+      />  }
     </>
 
   )
