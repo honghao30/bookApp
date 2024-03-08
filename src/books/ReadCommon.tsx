@@ -201,11 +201,20 @@ const ReadCommon: React.FC = () => {
   return (
     <>  
       {scrollDirection !== 'down' && currentScrollPosition <= 200 && (
-        <TopUtilDetail cates={cates} bookCates={bookCates} />
+        <TopUtilDetail
+          cates={cates}
+          bookId={bookId}
+          bookCates={bookCates}
+          index={index}
+          realVoice={realVoice}
+          onlyAudio={onlyAudio}
+          hasBible={hasBible}
+          
+        />
       )}
       <BookContentDv>      
         <SubTitle>
-          {bookCates}Scroll Direction: {scrollDirection}
+          {bookCates}
         </SubTitle>
         {showGotoTop &&
           <GotoTop />

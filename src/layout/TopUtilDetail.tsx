@@ -16,7 +16,7 @@ import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { authService } from '../../src/firebase';
 import { useEffect, useState } from 'react';
 
-const TopUtilDetail: React.FC<{ cates: string, bookCates:string }> = ({ cates, bookCates }) => {  
+const TopUtilDetail: React.FC<{ cates: string, bookCates:string, bookId: string }> = ({ cates, bookCates, bookId }) => {  
   const navigate = useNavigate();
   const [openList, setOpenList] = useState(false);
 
@@ -46,7 +46,7 @@ const TopUtilDetail: React.FC<{ cates: string, bookCates:string }> = ({ cates, b
                   <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                <p className='bookName'>{cates}</p>
+                <p className='bookName'>{cates} {bookId}</p>
                 {bookCates && <p className='bookCates'>- {bookCates}</p> }
             </Typography>   
             <IconButton
@@ -61,7 +61,7 @@ const TopUtilDetail: React.FC<{ cates: string, bookCates:string }> = ({ cates, b
             </IconButton>                 
         </Toolbar>
       </AppBar>
-      {openList && <BookSubCate handleClose={handleClose} />}
+      {openList && <BookSubCate handleClose={handleClose} bookId={ bookId } />}
     </Box>
   );
 };

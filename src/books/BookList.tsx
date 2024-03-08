@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Loading from './compornents/Loading';
-import BookListItem from './compornents/BookListItem';
 
 // fire base
 import { db } from '../../src/firebase';
