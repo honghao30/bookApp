@@ -145,10 +145,15 @@ const ReadCommon: React.FC = () => {
 
   const getBookDetail = async () => {          
     const docRef = doc(db, bookId, id);      
-    const docSnap = await getDoc(docRef);    
+    const docSnap = await getDoc(docRef);   
+    console.log(docSnap) 
     if (docSnap.exists()) {
-      setBook(docSnap.data())
+      setBook(docSnap.data())      
+      console.log(docSnap.data())
     }      
+    if (docSnap.data().url) {
+      setHasAudio(true)
+    }
   }
   const getFireData = async () => {    
     const docRef = doc(db, "originVoice", id);  
@@ -156,7 +161,10 @@ const ReadCommon: React.FC = () => {
   
     if (docSnap.exists()) {
       setBook(docSnap.data())
-    }    
+    }  
+    if (docSnap.data().url) {
+      setHasAudio(true)
+    }      
   }
 
   const modifayUpdate = async () => {
@@ -187,12 +195,7 @@ const ReadCommon: React.FC = () => {
       getFireData();
     } else {
       getBookDetail();
-    }
-    if (book.url !== undefined && book.url !== '') {
-      setHasAudio(true);
-    } else {
-      setHasAudio(false);
-    }    
+    }  
   }, []);
 
   if (!book) {

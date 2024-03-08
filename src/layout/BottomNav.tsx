@@ -78,7 +78,7 @@ const BottomNav: React.FC<{ onlyAudio: boolean, hasAudio: boolean }> = ({ onlyAu
           icon={<TravelExploreIcon />}
           onClick={ alertMsg }
         />
-        {!onlyAudio || hasAudio &&
+        {!onlyAudio && hasAudio &&
         <BottomNavigationAction
           label="오디오"
           value="오디오"
