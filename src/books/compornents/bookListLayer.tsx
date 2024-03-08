@@ -56,14 +56,6 @@ const BookSubCate: React.FC<{ handleClose: () => void, bookId: string }> = ({ ha
         setBook(newData);                   
     })      
   }
-  const getFireData = async () => {    
-    const docRef = doc(db, "originVoice", id);  
-    const docSnap = await getDoc(docRef);
-  
-    if (docSnap.exists()) {
-      setBook(docSnap.data())
-    }    
-  }
 
   const handleMaskClick = () => {
     handleClose();
@@ -71,11 +63,7 @@ const BookSubCate: React.FC<{ handleClose: () => void, bookId: string }> = ({ ha
 
   useEffect(() => {
     getBookDetail()
-    // if (realVoice) {
-    //   getFireData();
-    // } else {
-    //   getBookDetail();
-    // }     
+  
   }, []);
 
   return (
