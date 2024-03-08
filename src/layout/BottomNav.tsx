@@ -24,7 +24,7 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-const BottomNav: React.FC = () => {
+const BottomNav: React.FC<{ onlyAudio: boolean, hasAudio: boolean }> = ({ onlyAudio, hasAudio }) => {
   const [value, setValue] = useState('recents');
   const navigate = useNavigate();
   const [drawer, setDrawer] = useState(false);
@@ -78,12 +78,13 @@ const BottomNav: React.FC = () => {
           icon={<TravelExploreIcon />}
           onClick={ alertMsg }
         />
+        {!onlyAudio || hasAudio &&
         <BottomNavigationAction
           label="오디오"
           value="오디오"
           icon={<VolumeUpIcon />}
           onClick={ alertMsg }
-        />
+        />}
         <BottomNavigationAction
           label="이전"
           value="이전"

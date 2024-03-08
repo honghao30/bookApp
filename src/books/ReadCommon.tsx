@@ -122,7 +122,7 @@ const ReadCommon: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { scrollDirection, showGotoTop, currentScrollPosition } = useScrollDirection();  
-
+  const [hasAudio, setHasAudio] = useState(false);
   const quillRef = useRef()
 
   const modules = useMemo(() => {
@@ -188,6 +188,11 @@ const ReadCommon: React.FC = () => {
     } else {
       getBookDetail();
     }
+    if (book.url !== undefined && book.url !== '') {
+      setHasAudio(true);
+    } else {
+      setHasAudio(false);
+    }    
   }, []);
 
   if (!book) {
@@ -319,6 +324,7 @@ const ReadCommon: React.FC = () => {
       </BookContentDv>  
       {scrollDirection !== 'down' && currentScrollPosition <= 200 && <BottomNav 
         onlyAudio={onlyAudio}
+        hasAudio={hasAudio}
       />  }
     </>
 
